@@ -1,0 +1,95 @@
+﻿@model IEnumerable<aplicacion.models.Multipropietario>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Comuna)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Manzana)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RunRut)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PorcentajeDerecho)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fojas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AnoInscripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroInscripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaInscripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AnoVigenciaInicial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AnoVigenciaFinal)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comuna)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Manzana)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Predio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RunRut)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PorcentajeDerecho)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fojas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnoInscripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroInscripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInscripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnoVigenciaInicial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnoVigenciaFinal)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
