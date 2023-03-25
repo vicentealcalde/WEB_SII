@@ -19,11 +19,29 @@ namespace aplicacion.Controllers
         }
 
         // GET: Multipropietarios
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string searchDate)
         {
-              return _context.Multipropietarios != null ? 
+            if (_context.Multipropietarios == null)
+            {
+                return Problem("Entity set 'EscriturasContext.Multipropietarios'  is null.");
+            }
+
+            var Multi = from m in _context.Multipropietarios
+                         select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                Multi = Multi.Where(s => s.Comuna!.Contains(searchString));
+            }
+            if (!String.IsNullOrEmpty(searchDate))
+            {
+                Multi = Multi.Where(s => s.AnoInscripcion.ToString()!.Contains(searchDate));
+            }
+            return View(await Multi.ToListAsync());
+        /*
+            return _context.Multipropietarios != null ? 
                           View(await _context.Multipropietarios.ToListAsync()) :
                           Problem("Entity set 'EscriturasContext.Multipropietarios'  is null.");
+        */
         }
 
         // GET: Multipropietarios/Details/5
