@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using aplicacion.models;
+using aplicacion.ViewModels;
 
 namespace aplicacion.Controllers
 {
@@ -47,7 +48,9 @@ namespace aplicacion.Controllers
         // GET: Escrituras/Create
         public IActionResult Create()
         {
-            return View();
+            var model = new EscrituraViewModel();
+            return View(model);
+
         }
 
         // POST: Escrituras/Create
@@ -55,14 +58,95 @@ namespace aplicacion.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NumAtencion,Cne,Comuna,Manzana,Predio,Fojas,FechaInscripcion,NumeroInscripcion")] Escritura escritura)
+        public async Task<IActionResult> Create(EscrituraViewModel escrituraViewModel)
         {
+            foreach (var modelState in ModelState)
+            {
+                var propertyName = modelState.Key;
+                var value = modelState.Value;
+                var errors = value.Errors;
+                var attemptedValue = value.AttemptedValue;
+                var rawValue = value.RawValue;
+
+                Console.WriteLine($"Property Name: {propertyName}");
+                Console.WriteLine($"Attempted Value: {attemptedValue}");
+                Console.WriteLine($"Raw Value: {rawValue}");
+
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"Error: {error.ErrorMessage}");
+                }
+            }
+
+            Console.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
             if (ModelState.IsValid)
             {
-                _context.Add(escritura);
+                Console.WriteLine("entre a if ");
+                var escritura = new Escritura
+                {
+                    Cne = escrituraViewModel.Escritura.Cne,
+                    Comuna = escrituraViewModel.Escritura.Comuna,
+                    Manzana = escrituraViewModel.Escritura.Manzana,
+                    Predio = escrituraViewModel.Escritura.Predio,
+                    Fojas = escrituraViewModel.Escritura.Fojas,
+                    FechaInscripcion = escrituraViewModel.Escritura.FechaInscripcion,
+                    NumeroInscripcion = escrituraViewModel.Escritura.NumeroInscripcion
+                };
+                Console.WriteLine("Cree escritura");
+
+                // agregar adquirentes a la escritura
+                foreach (var adquirenteViewModel in escrituraViewModel.Adquirentes)
+                {
+                    Console.WriteLine("Cree adquirentes");
+                    var adquirente = new Adquirente
+                    {
+                        NumAtencion = adquirenteViewModel.NumAtencion,
+                        RunRut = adquirenteViewModel.RunRut,
+                        PorcentajeDerecho = adquirenteViewModel.PorcentajeDerecho,
+                        PorcentajeDerechoNoAcreditado = adquirenteViewModel.PorcentajeDerechoNoAcreditado,
+                        NumAtencionNavigation = escritura
+                    };
+
+                    escritura.Adquirentes.Add(adquirente);
+                }
+
+                // agregar enajenantes a la escritura
+                foreach (var enajenanteViewModel in escrituraViewModel.Enajenantes)
+                {
+                    var enajenante = new Enajenante
+                    {
+                        RunRut = enajenanteViewModel.RunRut,
+                        PorcentajeDerecho = enajenanteViewModel.PorcentajeDerecho,
+                        PorcentajeDerechoNoAcreditado = enajenanteViewModel.PorcentajeDerechoNoAcreditado,
+                        NumAtencionNavigation = escritura
+                    };
+
+                    escritura.Enajenantes.Add(enajenante);
+                }
+
+                _context.Escrituras.Add(escritura);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            return View(escrituraViewModel);
+        }
+        // POST: Escrituras/CreateMultiple
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateMultiple(List<Adquirente> adquirentes, Escritura escritura)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var adquirente in adquirentes)
+                {
+                    adquirente.NumAtencionNavigation = escritura;
+                    _context.Add(adquirente);
+                }
+
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+
             return View(escritura);
         }
 
