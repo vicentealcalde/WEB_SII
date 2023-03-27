@@ -48,6 +48,10 @@ namespace aplicacion.Controllers
         // GET: Escrituras/Create
         public IActionResult Create()
         {
+            var dbContext = new EscriturasContext();
+            var ultimoNumAtencion = dbContext.Escrituras.OrderByDescending(e => e.FechaInscripcion).Select(e => e.NumAtencion).FirstOrDefault();
+            ultimoNumAtencion += 1;
+            ViewBag.NumAtencion = ultimoNumAtencion;
             var model = new EscrituraViewModel();
             return View(model);
 
@@ -60,27 +64,9 @@ namespace aplicacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EscrituraViewModel escrituraViewModel)
         {
-            foreach (var modelState in ModelState)
-            {
-                var propertyName = modelState.Key;
-                var value = modelState.Value;
-                var errors = value.Errors;
-                var attemptedValue = value.AttemptedValue;
-                var rawValue = value.RawValue;
-
-                Console.WriteLine($"Property Name: {propertyName}");
-                Console.WriteLine($"Attempted Value: {attemptedValue}");
-                Console.WriteLine($"Raw Value: {rawValue}");
-
-                foreach (var error in errors)
-                {
-                    Console.WriteLine($"Error: {error.ErrorMessage}");
-                }
-            }
-
-            Console.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
-            if (ModelState.IsValid)
-            {
+                var dbContext = new EscriturasContext();
+                var NumAtencion = dbContext.Escrituras.OrderByDescending(e => e.FechaInscripcion).Select(e => e.NumAtencion).FirstOrDefault();
+                NumAtencion = NumAtencion + 1;
                 Console.WriteLine("entre a if ");
                 var escritura = new Escritura
                 {
@@ -127,8 +113,8 @@ namespace aplicacion.Controllers
                 _context.Escrituras.Add(escritura);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            return View(escrituraViewModel);
+            
+            //return View(escrituraViewModel);
         }
         // POST: Escrituras/CreateMultiple
         [HttpPost]
