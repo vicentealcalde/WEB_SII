@@ -12,6 +12,7 @@ namespace aplicacion.Controllers
 {
     public class EscriturasController : Controller
     {
+        private EscriturasContext db = new EscriturasContext();
         private readonly EscriturasContext _context;
 
         public EscriturasController(EscriturasContext context)
@@ -41,7 +42,19 @@ namespace aplicacion.Controllers
             {
                 return NotFound();
             }
-
+            var enajenantesActuales = db.Enajenantes
+                    .Where(b => b.NumAtencion == id)
+                    .ToList();
+            var adquirientesActuales = db.Adquirentes
+                    .Where(c => c.NumAtencion == id)
+                    .ToList();
+            System.Diagnostics.Debug.WriteLine(adquirientesActuales);
+            foreach (var enajenanteActual in adquirientesActuales)
+            {
+                System.Diagnostics.Debug.WriteLine(enajenanteActual.ToString());
+            }
+            ViewBag.EnajenantesActuales = enajenantesActuales;
+            ViewBag.AdquirientesActuales = adquirientesActuales;
             return View(escritura);
         }
 
