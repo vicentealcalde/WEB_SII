@@ -112,7 +112,7 @@ luego se le debe añadir lo la siguiente base de datos :
         NumeroInscripcion INT NOT NULL,
         FechaInscripcion DATE NOT NULL,
         AnoVigenciaInicial INT NOT NULL,
-        AnoVigenciaFinal INT NOT NULL
+        AnoVigenciaFinal INT 
     )
     GO
 
@@ -155,6 +155,25 @@ tambien arriba en las pestañas al lado derecho esta el boton de multipropietari
         NumeroInscripcion INT NOT NULL,
         FechaInscripcion DATE NOT NULL,
         AnoVigenciaInicial INT NOT NULL,
-        AnoVigenciaFinal INT NOT NULL
+        AnoVigenciaFinal INT 
     )
+tambien es necesario agregar la siguiente consulta sql al sql server despues de poner los datos, SIEMPRE SE DEBE PONER AL FINAL
 
+    UPDATE MULTIPROPIETARIO
+    SET [AnoVigenciaFinal] = 0
+    WHERE [AnoVigenciaFinal] IS NULL;
+
+# EJEMPLO
+    GO
+    USE Escrituras;
+    
+    GO
+    INSERT INTO MULTIPROPIETARIO (Comuna, Manzana, Predio, RUN_RUT, PorcentajeDerecho, Fojas, AnoInscripcion, NumeroInscripcion, FechaInscripcion, AnoVigenciaInicial, AnoVigenciaFinal)
+    VALUES ('Comuna A', 2, 3, '33333333-3', 25.0, 2, 2023, 5678, '2023-01-01', 2023, NULL),
+        ('Comuna A', 2, 3, '44444444-4', 50.0, 2, 2022, 5678, '2023-01-01', 2023, 2023),
+        ('Comuna A', 2, 3, '55555555-5', 25.0, 2, 2023, 5678, '2023-01-01', 2023, Null)
+    GO
+    
+    UPDATE MULTIPROPIETARIO
+    SET [AnoVigenciaFinal] = 0
+    WHERE [AnoVigenciaFinal] IS NULL;

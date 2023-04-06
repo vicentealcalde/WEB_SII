@@ -1,5 +1,6 @@
 ﻿@model aplicacion.ViewModels.EscrituraViewModel
 
+<<<<<<< HEAD
 @{
     ViewData["Title"] = "Create";
 }
@@ -74,6 +75,68 @@
                 </div>
                 <div class="card-body">
                     <table class="default">
+=======
+<h2>Create</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.Escritura.Cne" class="control-label"></label>
+                <select asp-for="@Model.Escritura.Cne" class="form-control">
+                    <option value="compraventa">Compraventa</option>
+                    <option value="regularizacion">Regularización de Patrimonio</option>
+                </select>
+                <span asp-validation-for="@Model.Escritura.Cne" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Escritura.Comuna" class="control-label"></label>
+                <input asp-for="@Model.Escritura.Comuna" class="form-control" />
+                <span asp-validation-for="@Model.Escritura.Comuna" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Escritura.Manzana" class="control-label"></label>
+                <input asp-for="@Model.Escritura.Manzana" class="form-control" />
+                <span asp-validation-for="@Model.Escritura.Manzana" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Escritura.Predio" class="control-label"></label>
+                <input asp-for="@Model.Escritura.Predio" class="form-control" />
+                <span asp-validation-for="@Model.Escritura.Predio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Escritura.Fojas" class="control-label"></label>
+                <input asp-for="@Model.Escritura.Fojas" class="form-control" />
+                <span asp-validation-for="@Model.Escritura.Fojas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Escritura.FechaInscripcion" class="control-label"></label>
+                <input asp-for="@Model.Escritura.FechaInscripcion" class="form-control" />
+                <span asp-validation-for="@Model.Escritura.FechaInscripcion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Escritura.NumeroInscripcion" class="control-label"></label>
+                <input asp-for="@Model.Escritura.NumeroInscripcion" class="form-control" />
+                <span asp-validation-for="@Model.Escritura.NumeroInscripcion" class="text-danger"></span>
+            </div>
+            <hr />
+            <h3>Adquirentes</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>NumAtencion</th>
+                        <th>Run/Rut</th>
+                        <th>Número de atención</th>
+                        <th>Porcentaje derecho</th>
+                        <th>Porcentaje derecho no acreditado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Adquirentes.Count; i++)
+                    {
+>>>>>>> 377ceb8ab8830a0c778889343f92b4f0425be60d
                         <tr>
                             <td>
                                 <label for="CNE">CNE</label>
