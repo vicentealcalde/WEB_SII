@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using aplicacion.models;
 using aplicacion.ViewModels;
+using Azure.Core;
+using System.Globalization;
 
 namespace aplicacion.Controllers
 {
@@ -51,8 +53,11 @@ namespace aplicacion.Controllers
             var dbContext = new EscriturasContext();
             var ultimoNumAtencion = dbContext.Escrituras.OrderByDescending(e => e.FechaInscripcion).Select(e => e.NumAtencion).FirstOrDefault();
             ultimoNumAtencion += 1;
+            var enan = new Enajenante();
             ViewBag.NumAtencion = ultimoNumAtencion;
             var model = new EscrituraViewModel();
+            model.Adquirentes.Add(new Adquirente());
+            model.Enajenantes.Add(new Enajenante());
             return View(model);
 
         }
@@ -64,11 +69,50 @@ namespace aplicacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EscrituraViewModel escrituraViewModel)
         {
-                var dbContext = new EscriturasContext();
-                var NumAtencion = dbContext.Escrituras.OrderByDescending(e => e.FechaInscripcion).Select(e => e.NumAtencion).FirstOrDefault();
-                NumAtencion = NumAtencion + 1;
-                Console.WriteLine("entre a if ");
-                var escritura = new Escritura
+            Console.WriteLine("Hola como estas");
+            var dbContext = new EscriturasContext();
+            var NumAtencion = dbContext.Escrituras.OrderByDescending(e => e.FechaInscripcion).Select(e => e.NumAtencion).FirstOrDefault();
+            NumAtencion = NumAtencion + 1;
+            Console.WriteLine("entre a if ");
+            var escritura = new Escritura
+            {
+                Cne = escrituraViewModel.Escritura.Cne,
+                Comuna = escrituraViewModel.Escritura.Comuna,
+                Manzana = escrituraViewModel.Escritura.Manzana,
+                Predio = escrituraViewModel.Escritura.Predio,
+                Fojas = escrituraViewModel.Escritura.Fojas,
+                FechaInscripcion = escrituraViewModel.Escritura.FechaInscripcion,
+                NumeroInscripcion = escrituraViewModel.Escritura.NumeroInscripcion
+            };
+            Console.WriteLine("Cree escritura");
+            var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
+            var EnajenateRun = (Request.Form["Enajenate.RunRut"].ToString()).Split(",");
+            Console.WriteLine(AdquirienteRun.ToString());
+
+
+
+
+            /*
+            foreach (var modelState in ModelState)
+            {
+                var propertyName = modelState.Key;
+                var value = modelState.Value;
+                var errors = value.Errors;
+                var attemptedValue = value.AttemptedValue;
+                var rawValue = value.RawValue;
+
+                Console.WriteLine($"Property Name: {propertyName}");
+                Console.WriteLine($"Attempted Value: {attemptedValue}");
+                Console.WriteLine($"Raw Value: {rawValue}");
+
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"Error: {error.ErrorMessage}");
+                }
+            }
+
+            Console.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
+            var escritura = new Escritura
                 {
                     Cne = escrituraViewModel.Escritura.Cne,
                     Comuna = escrituraViewModel.Escritura.Comuna,
@@ -109,10 +153,15 @@ namespace aplicacion.Controllers
 
                     escritura.Enajenantes.Add(enajenante);
                 }
+            
+            _context.Escrituras.Add(escritura);
 
-                _context.Escrituras.Add(escritura);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+            await _context.SaveChangesAsync();
+*/
+
+
+            return RedirectToAction(nameof(Index));
             
             //return View(escrituraViewModel);
         }
@@ -187,6 +236,7 @@ namespace aplicacion.Controllers
             return View(escritura);
         }
 
+      
         // GET: Escrituras/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

@@ -1,144 +1,386 @@
 ﻿@model aplicacion.ViewModels.EscrituraViewModel
 
-<h2>Create</h2>
+@{
+    ViewData["Title"] = "Create";
+}
+@using (Html.BeginForm("Create", "Escrituras", FormMethod.Post))
+{
+    <style>
+        .card {
+            margin-bottom: 2em;
+        }
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="@Model.Escritura.Cne" class="control-label"></label>
-                <input asp-for="@Model.Escritura.Cne" class="form-control" />
-                <span asp-validation-for="@Model.Escritura.Cne" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Escritura.Comuna" class="control-label"></label>
-                <input asp-for="@Model.Escritura.Comuna" class="form-control" />
-                <span asp-validation-for="@Model.Escritura.Comuna" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Escritura.Manzana" class="control-label"></label>
-                <input asp-for="@Model.Escritura.Manzana" class="form-control" />
-                <span asp-validation-for="@Model.Escritura.Manzana" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Escritura.Predio" class="control-label"></label>
-                <input asp-for="@Model.Escritura.Predio" class="form-control" />
-                <span asp-validation-for="@Model.Escritura.Predio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Escritura.Fojas" class="control-label"></label>
-                <input asp-for="@Model.Escritura.Fojas" class="form-control" />
-                <span asp-validation-for="@Model.Escritura.Fojas" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Escritura.FechaInscripcion" class="control-label"></label>
-                <input asp-for="@Model.Escritura.FechaInscripcion" class="form-control" />
-                <span asp-validation-for="@Model.Escritura.FechaInscripcion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Escritura.NumeroInscripcion" class="control-label"></label>
-                <input asp-for="@Model.Escritura.NumeroInscripcion" class="form-control" />
-                <span asp-validation-for="@Model.Escritura.NumeroInscripcion" class="text-danger"></span>
-            </div>
-            <hr />
-            <h3>Adquirentes</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>NumAtencion</th>
-                        <th>Run/Rut</th>
-                        <th>Número de atención</th>
-                        <th>Porcentaje derecho</th>
-                        <th>Porcentaje derecho no acreditado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < Model.Adquirentes.Count; i++)
-                    {
+        .tr {
+            margin: 3em;
+        }
+
+        .td {
+            margin: em;
+        }
+
+        .default {
+            width: 100%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+
+            .default table {
+                width: 100%;
+                margin: 0 auto;
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+
+            .default th,
+            .default td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .default th {
+                background-color: #f2f2f2;
+            }
+
+            .default tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            .default tr:hover {
+                background-color: #ddd;
+            }
+
+        .add_button button {
+            margin-top: 20px;
+        }
+
+        .div_button {
+            margin-top: 20px;
+        }
+
+    </style>
+    <h1>Create</h1>
+
+    <h4>Enajenante</h4>
+    <hr />
+    <div class="row">
+   
+
+            <div class="card">
+                <div class="card-header bg-primary mb-3">
+                    INFORMACIÓN GENERAL
+                </div>
+                <div class="card-body">
+                    <table class="default">
                         <tr>
                             <td>
-                                <input asp-for="@Model.Adquirentes[i].NumAtencionNavigation" class="form-control" data-val="false" value="@ViewBag.NumAtencion" readonly />
-                               
+                                <label for="CNE">CNE</label>
                             </td>
                             <td>
-                                <input asp-for="@Model.Adquirentes[i].RunRut" class="form-control" />
-                                <span asp-validation-for="@Model.Adquirentes[i].RunRut" class="text-danger"></span>
+                                <div class="form-group">
+
+                                <select asp-for="@Model.Escritura.Cne" class="form-control">
+                                    <option value="compraventa" selected>Compraventa</option>
+                                    <option value="regularizacion">Regularización de Patrimonio</option>
+                                </select>
+                                <span asp-validation-for="@Model.Escritura.Cne" class="text-danger"></span>
+                                </div>
                             </td>
                             <td>
-                                <input asp-for="@Model.Adquirentes[i].NumAtencion" class="form-control" />
-                                <span asp-validation-for="@Model.Adquirentes[i].NumAtencion" class="text-danger"></span>
+                                <label for="COMUNA">Comuna:</label>
                             </td>
                             <td>
-                                <input asp-for="@Model.Adquirentes[i].PorcentajeDerecho" class="form-control" />
-                                <span asp-validation-for="@Model.Adquirentes[i].PorcentajeDerecho" class="text-danger"></span>
+                                <div class="form-group">
+                                   
+                                    <input asp-for="@Model.Escritura.Comuna" class="form-control" />
+                                    <span asp-validation-for="@Model.Escritura.Comuna" class="text-danger"></span>
+                                </div>
                             </td>
                             <td>
-                                <input asp-for="@Model.Adquirentes[i].PorcentajeDerechoNoAcreditado" class="form-control" />
-                                <span asp-validation-for="@Model.Adquirentes[i].PorcentajeDerechoNoAcreditado" class="text-danger"></span>
+                                <label for="Fecha_llenado">Fecha Llenado:</label>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                   
+                                    <input asp-for="@Model.Escritura.FechaInscripcion" class="form-control" />
+                                    <span asp-validation-for="@Model.Escritura.FechaInscripcion" class="text-danger"></span>
+                                </div>
                             </td>
                         </tr>
-                    }
-                </tbody>
-            </table>
-            <div class="form-group">
-                <a href="#" id="add-adquirente">Agregar adquirente</a>
-            </div>
-            <h3>Enajenantes</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>NumAtencion</th>
-                        <th>Run/Rut</th>
-                        <th>Número de atención</th>
-                        <th>Porcentaje derecho</th>
-                        <th>Porcentaje derecho no acreditado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < Model.Enajenantes.Count; i++)
-                    {
                         <tr>
                             <td>
-                                <input asp-for="@Model.Enajenantes[i].NumAtencionNavigation" class="form-control" data-val="false" value="@ViewBag.NumAtencion" readonly />
+                                <label for="Manzana">Manzana:</label>
                             </td>
                             <td>
-                                <input asp-for="@Model.Enajenantes[i].RunRut" class="form-control" />
-                                <span asp-validation-for="@Model.Enajenantes[i].RunRut" class="text-danger"></span>
+                                <div class="form-group">
+                                   
+                                    <input asp-for="@Model.Escritura.Manzana" class="form-control" />
+                                    <span asp-validation-for="@Model.Escritura.Manzana" class="text-danger"></span>
+                                </div>
                             </td>
                             <td>
-                                <input asp-for="@Model.Enajenantes[i].NumAtencion" class="form-control" />
-                                <span asp-validation-for="@Model.Enajenantes[i].NumAtencion" class="text-danger"></span>
+                                <label for="Predio">predio :</label>
                             </td>
                             <td>
-                                <input asp-for="@Model.Enajenantes[i].PorcentajeDerecho" class="form-control" />
-                                <span asp-validation-for="@Model.Enajenantes[i].PorcentajeDerecho" class="text-danger"></span>
+                                <div class="form-group">
+                                   
+                                    <input asp-for="@Model.Escritura.Predio" class="form-control" />
+                                    <span asp-validation-for="@Model.Escritura.Predio" class="text-danger"></span>
+                                </div>
                             </td>
                             <td>
-                                <input asp-for="@Model.Enajenantes[i].PorcentajeDerechoNoAcreditado" class="form-control" />
-                                <span asp-validation-for="@Model.Enajenantes[i].PorcentajeDerechoNoAcreditado" class="text-danger"></span>
+                                <label for="Ninscripcion">Numero de inscripcion:</label>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    
+                                    <input asp-for="@Model.Escritura.NumeroInscripcion" class="form-control" />
+                                    <span asp-validation-for="@Model.Escritura.NumeroInscripcion" class="text-danger"></span>
+                                </div>
+                            </td>
+                       
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="Foja">Fojas:</label>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                   
+                                    <input asp-for="@Model.Escritura.Fojas" class="form-control" />
+                                    <span asp-validation-for="@Model.Escritura.Fojas" class="text-danger"></span>
+                                </div>
                             </td>
                         </tr>
+                    </table>
+                </div>
+            </div>
+        <div class="card">
+            <div class="card-header bg-primary mb-3">
+                INFORMACIÓN DE LOS Enajenantes(S) O CAUSANTE(S)
+            </div>
+            <div class="card-body">
+
+                <table class="default" id="Enajenante">
+                    <tr>
+
+                        <th>RUT</th>
+
+                        <th>% Derechos</th>
+
+                        <th>NUmero de Atencion</th>
+
+                        <th>Porcentaje Derecho no Acreditado</th>
+
+                    </tr>
+                </table>
+
+                <div id="div_button">
+                    <button id="add_button" type="button" class="btn btn-primary  rounded-pill" onclick="addNewRowE()"> Agregar fila</button>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="card" id="Adquirientes">
+            <div class="card-header bg-primary mb-3">
+                INFORMACIÓN DE LOS ADQUIRENTE(S) O CAUSANTE(S)
+            </div>
+            <div class="card-body">
+
+                <table class="default" id="Adquirente">
+                    <tr>
+
+                        <th>RUT</th>
+
+                        <th>% Derechos</th>
+
+                        <th>NUmero de Atencion</th>
+
+                        <th>Porcentaje Derecho no Acreditado</th>
+
+                        <th> </th>
+
+                    </tr>
+                </table>
+
+                <div id="div_button">
+                    <button id="add_button" type="button" class="btn btn-primary  rounded-pill" onclick="addNewRow()"> Agregar fila</button>
+                </div>
+
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Oculta el div al cargar la página
+                $('#Adquirientes').show();
+
+                // Cuando se selecciona una opción en el select
+                $('select').change(function () {
+                    if ($(this).val() === 'regularizacion') {
+                        // Si la opción seleccionada es "regularizacion", oculta el div
+                        $('#Adquirientes').hide();
+                    } else {
+                        // De lo contrario, muestra el div
+                        $('#Adquirientes').show();
                     }
-                </tbody>
-            </table>
-            <div class="form-group">
-                <a href="#" id="add-adquirente">Agregar Enajenantes</a>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                });
+            });
+        </script>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+        
+    
     </div>
-</div>
+}
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
+
 @section Scripts {
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        function uncheckOther(currentCheckboxId, otherCheckboxId) {
+            var currentCheckbox = document.getElementById(currentCheckboxId);
+            var otherCheckbox = document.getElementById(otherCheckboxId);
+
+            otherCheckbox.checked = !currentCheckbox.checked;
+        }
+
+        function myCreateFunction() {
+            var table = document.getElementById("myTable");
+            var row = table.insertRow(0);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = "NEW CELL1";
+            cell2.innerHTML = "NEW CELL2";
+        }
+
+        function addNewRow() {
+            var table = document.getElementById("Adquirente");
+            var rowCount = table.rows.length;
+            var cellCount = table.rows[0].cells.length;
+            var row = table.insertRow(rowCount);
+            for (var i = 0; i < cellCount; i++) {
+                var cell = row.insertCell(i);
+
+                if (i == 0) {
+                    cell.innerHTML = '@Html.TextBoxFor(model => model.Adquirente.RunRut, new { @class = "form-control" })';
+                } else if (i == 1) {
+                    cell.innerHTML = '@Html.TextBoxFor(model => model.Adquirente.PorcentajeDerecho, new { @class = "form-control" })';
+                } else if (i == 2) {
+                    cell.innerHTML = '@Html.TextBoxFor(model => model.Adquirente.NumAtencion, new { @class = "form-control" })';
+                } else if (i == 3) {
+                    cell.innerHTML = '@Html.TextBoxFor(model => model.Adquirente.PorcentajeDerechoNoAcreditado, new { @class = "form-control" })';
+                } else if (i == 4) {
+                    cell.innerHTML = '<button class="btn btn-danger" data-rowid="' + rowCount + '">Delete</button>';
+                    // Add a click event listener to the new delete button
+                    var newDeleteButton = row.querySelector('button[data-rowid="' + rowCount + '"]');
+                    newDeleteButton.addEventListener('click', function () {
+                        deleteRow(tableId, this);
+                    });
+                }
+            }
+        }
+        function addNewRowE() {
+            var table = document.getElementById("Enajenante");
+            var rowCount = table.rows.length;
+            var cellCount = table.rows[0].cells.length;
+            var row = table.insertRow(rowCount);
+            for (var i = 0; i < cellCount; i++) {
+                var cell = row.insertCell(i);
+                if (i == 0) {
+                    cell.innerHTML = '@Html.TextBoxFor(model => model.Enajenante.RunRut, new { @class = "form-control" })';
+                } else if (i == 1) {
+                    cell.innerHTML = '@Html.TextBoxFor(model => model.Enajenante.PorcentajeDerecho, new { @class = "form-control" })';
+                } else if (i == 2) {
+                    cell.innerHTML = '@Html.TextBoxFor(model => model.Enajenante.NumAtencion, new { @class = "form-control" })';
+                } else if (i == 3) {
+                    cell.innerHTML = '@Html.TextBoxFor(model => model.Enajenante.PorcentajeDerechoNoAcreditado, new { @class = "form-control" })';
+                } else {
+                    cell.innerHTML = '<button class="btn btn-danger" data-rowid="' + rowCount + '">Delete</button>';
+                }
+            }
+            // Add a click event listener to the new delete button
+            var newDeleteButton = row.querySelector('button[data-rowid="' + rowCount + '"]');
+            newDeleteButton.addEventListener('click', function () { deleteRow(tableId, this); });
+
+        }
+
+        /* This method will delete a row */
+        function deleteRow(ele) {
+            var table = document.getElementById("Adquirente");
+            var rowCount = table.rows.length;
+            if (rowCount <= 1) {
+                alert("There is no row available to delete!");
+                return;
+            }
+            if (ele) {
+                //delete specific row
+                ele.parentNode.parentNode.remove();
+            } else {
+                //delete last row
+                table.deleteRow(rowCount - 1);
+            }
+        }
+
+        function deleteRowE(ele) {
+            var table = document.getElementById("Enajenante");
+            var rowCount = table.rows.length;
+            if (rowCount <= 1) {
+                alert("There is no row available to delete!");
+                return;
+            }
+            if (ele) {
+                //delete specific row
+                ele.parentNode.parentNode.remove();
+            } else {
+                //delete last row
+                table.deleteRow(rowCount - 1);
+            }
+        }
+
+        const selectComunas = document.getElementById('Comuna');
+
+        // Función para obtener las comunas de una región dada
+        function getComunas(region) {
+            const url = `https://apis.digital.gob.cl/dpa/regiones/${region}/comunas`;
+            return fetch(url).then(response => response.json());
+        }
+
+        // Array con los números de regiones de Chile (1-16)
+        const regiones = [...Array(16).keys()].map(x => ++x);
+
+        // Obtener las comunas de todas las regiones
+        Promise.all(regiones.map(getComunas))
+            .then(regionesComunas => {
+                // Concatenar las comunas de todas las regiones en un solo array
+                const comunas = regionesComunas.reduce((acumulador, comunasRegion) => {
+                    return acumulador.concat(comunasRegion);
+                }, []);
+                // Ordenar el array de comunas alfabéticamente
+                comunas.sort((a, b) => a.nombre.localeCompare(b.nombre));
+                // Agregar las opciones al select de comunas
+                comunas.forEach(comuna => {
+                    const option = document.createElement('option');
+                    option.value = comuna.nombre.toLowerCase();
+                    option.text = comuna.nombre;
+                    selectComunas.add(option);
+                });
+            })
+            .catch(error => console.error(error));
+
+
+        
+    </script>
 }
