@@ -297,7 +297,7 @@
                 } else if (i == 2) {
                     cell.innerHTML = '@Html.TextBoxFor(model => model.Adquirente.NumAtencion, new { @class = "form-control" })';
                 } else if (i == 3) {
-                    cell.innerHTML = '@Html.TextBoxFor(model => model.Adquirente.PorcentajeDerechoNoAcreditado, new { @class = "form-control" })';
+                    cell.innerHTML = '@Html.CheckBoxFor(model => model.Adquirente.PorcentajeDerechoNoAcreditado, new { @class = "form-control" })';
                 } else if (i == 4) {
                     cell.innerHTML = '<button class="btn btn-danger" data-rowid="' + rowCount + '">Delete</button>';
                     // Add a click event listener to the new delete button
@@ -322,7 +322,7 @@
                 } else if (i == 2) {
                     cell.innerHTML = '@Html.TextBoxFor(model => model.Enajenante.NumAtencion, new { @class = "form-control" })';
                 } else if (i == 3) {
-                    cell.innerHTML = '@Html.TextBoxFor(model => model.Enajenante.PorcentajeDerechoNoAcreditado, new { @class = "form-control" })';
+                    cell.innerHTML = '@Html.CheckBoxFor(model => model.Enajenante.PorcentajeDerechoNoAcreditado, new { @class = "form-check-input" })';
                 } else {
                     cell.innerHTML = '<button class="btn btn-danger" data-rowid="' + rowCount + '">Delete</button>';
                 }

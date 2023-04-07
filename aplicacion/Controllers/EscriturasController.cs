@@ -99,82 +99,53 @@ namespace aplicacion.Controllers
                 NumeroInscripcion = escrituraViewModel.Escritura.NumeroInscripcion
             };
             Console.WriteLine("Cree escritura");
-            var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
+           
             var EnajenateRun = (Request.Form["Enajenate.RunRut"].ToString()).Split(",");
-            
-            Console.WriteLine(AdquirienteRun);
-
-
-
-
-
-            /*
-            foreach (var modelState in ModelState)
+            var EnajenantePorcentajeDerecho = (Request.Form["Enajenante.PorcentajeDerecho"].ToString()).Split(",");
+            //List<double> EnajenantePorcentajeDerecho = EPorcentajeDerecho.ConvertAll(x => double.Parse(x));
+            var EnajenanteNumAtencion = (Request.Form["Enajenante.NumAtencion"].ToString()).Split(",");
+            var EnajenantePorcentajeDerechoNoAcreditado = (Request.Form["Enajenante.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
+            for (int i = 0; i < EnajenateRun.Length; i++)
             {
-                var propertyName = modelState.Key;
-                var value = modelState.Value;
-                var errors = value.Errors;
-                var attemptedValue = value.AttemptedValue;
-                var rawValue = value.RawValue;
-
-                Console.WriteLine($"Property Name: {propertyName}");
-                Console.WriteLine($"Attempted Value: {attemptedValue}");
-                Console.WriteLine($"Raw Value: {rawValue}");
-
-                foreach (var error in errors)
+                var adquirente = new Adquirente
                 {
-                    Console.WriteLine($"Error: {error.ErrorMessage}");
-                }
+                    NumAtencion = int.Parse(EnajenanteNumAtencion[i]),
+                    RunRut = EnajenateRun[i],
+                    PorcentajeDerecho = double.Parse(EnajenantePorcentajeDerecho[i]),
+                    PorcentajeDerechoNoAcreditado = bool.Parse(EnajenantePorcentajeDerechoNoAcreditado[i]),
+                    NumAtencionNavigation = escritura
+                };
+
+                escritura.Adquirentes.Add(adquirente);
+
             }
 
-            Console.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
-            var escritura = new Escritura
-                {
-                    Cne = escrituraViewModel.Escritura.Cne,
-                    Comuna = escrituraViewModel.Escritura.Comuna,
-                    Manzana = escrituraViewModel.Escritura.Manzana,
-                    Predio = escrituraViewModel.Escritura.Predio,
-                    Fojas = escrituraViewModel.Escritura.Fojas,
-                    FechaInscripcion = escrituraViewModel.Escritura.FechaInscripcion,
-                    NumeroInscripcion = escrituraViewModel.Escritura.NumeroInscripcion
-                };
-                Console.WriteLine("Cree escritura");
+            if (escritura.Cne == "compraventa")
+            {
+                var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
+                var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
+                //List<double> EnajenantePorcentajeDerecho = EPorcentajeDerecho.ConvertAll(x => double.Parse(x));
+                var AdquirenteNumAtencion = (Request.Form["Adquirente.NumAtencion"].ToString()).Split(",");
+                var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
 
-                // agregar adquirentes a la escritura
-                foreach (var adquirenteViewModel in escrituraViewModel.Adquirentes)
-                {
-                    Console.WriteLine("Cree adquirentes");
-                    var adquirente = new Adquirente
-                    {
-                        NumAtencion = adquirenteViewModel.NumAtencion,
-                        RunRut = adquirenteViewModel.RunRut,
-                        PorcentajeDerecho = adquirenteViewModel.PorcentajeDerecho,
-                        PorcentajeDerechoNoAcreditado = adquirenteViewModel.PorcentajeDerechoNoAcreditado,
-                        NumAtencionNavigation = escritura
-                    };
-
-                    escritura.Adquirentes.Add(adquirente);
-                }
-
-                // agregar enajenantes a la escritura
-                foreach (var enajenanteViewModel in escrituraViewModel.Enajenantes)
+                for (int i = 0; i < AdquirienteRun.Length; i++)
                 {
                     var enajenante = new Enajenante
                     {
-                        RunRut = enajenanteViewModel.RunRut,
-                        PorcentajeDerecho = enajenanteViewModel.PorcentajeDerecho,
-                        PorcentajeDerechoNoAcreditado = enajenanteViewModel.PorcentajeDerechoNoAcreditado,
+                        NumAtencion = int.Parse(EnajenanteNumAtencion[i]),
+                        RunRut = AdquirienteRun[i],
+                        PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]),
+                        PorcentajeDerechoNoAcreditado = bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]),
                         NumAtencionNavigation = escritura
                     };
 
                     escritura.Enajenantes.Add(enajenante);
+
                 }
-            
+            }
+
             _context.Escrituras.Add(escritura);
-
-
             await _context.SaveChangesAsync();
-*/
 
 
             return RedirectToAction(nameof(Index));
