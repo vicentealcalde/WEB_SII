@@ -87,6 +87,7 @@ namespace aplicacion.Controllers
             var NumAtencion = dbContext.Escrituras.OrderByDescending(e => e.FechaInscripcion).Select(e => e.NumAtencion).FirstOrDefault();
             NumAtencion = NumAtencion + 1;
             Console.WriteLine("entre a if ");
+            Console.WriteLine(escrituraViewModel.Escritura.Cne);
             var escritura = new Escritura
             {
                 Cne = escrituraViewModel.Escritura.Cne,
@@ -100,7 +101,9 @@ namespace aplicacion.Controllers
             Console.WriteLine("Cree escritura");
             var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
             var EnajenateRun = (Request.Form["Enajenate.RunRut"].ToString()).Split(",");
-            Console.WriteLine(AdquirienteRun.ToString());
+            
+            Console.WriteLine(AdquirienteRun);
+
 
 
 
