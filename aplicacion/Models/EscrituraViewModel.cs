@@ -13,10 +13,13 @@ public class EscrituraViewModel
     public List<Adquirente> Adquirentes { get; set; }
     public List<Enajenante> Enajenantes { get; set; }
 
-    public EscrituraViewModel()
-    {
-        Adquirentes = new List<Adquirente>() { new Adquirente(), new Adquirente(), new Adquirente(), new Adquirente(), new Adquirente() };
-        Enajenantes = new List<Enajenante>() { new Enajenante(), new Enajenante(), new Enajenante(), new Enajenante(), new Enajenante() };
-    }
+    public List<Comuna> Comunas { get; set; }
 
+
+}
+
+public class Comuna
+{
+    public string Codigo { get; set; }
+    public string Nombre { get; set; }
 }

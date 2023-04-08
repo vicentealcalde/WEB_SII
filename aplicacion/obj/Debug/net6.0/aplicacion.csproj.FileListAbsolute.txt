@@ -1,11 +1,10 @@
+C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\aplicacion.dll
 C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\appsettings.json
 C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\aplicacion.staticwebassets.runtime.json
 C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\aplicacion.exe
 C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\aplicacion.deps.json
 C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\aplicacion.runtimeconfig.json
-C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\aplicacion.dll
-C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\aplicacion.pdb
 C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\Azure.Core.dll
 C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\Azure.Identity.dll
 C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\Humanizer.dll
@@ -286,4 +285,5 @@ C:\Users\vicen\source\repos\aplicacion\aplicacion\obj\Debug\net6.0\aplicacion.dl
 C:\Users\vicen\source\repos\aplicacion\aplicacion\obj\Debug\net6.0\refint\aplicacion.dll
 C:\Users\vicen\source\repos\aplicacion\aplicacion\obj\Debug\net6.0\aplicacion.pdb
 C:\Users\vicen\source\repos\aplicacion\aplicacion\obj\Debug\net6.0\aplicacion.genruntimeconfig.cache
+C:\Users\vicen\source\repos\aplicacion\aplicacion\bin\Debug\net6.0\aplicacion.pdb
 C:\Users\vicen\source\repos\aplicacion\aplicacion\obj\Debug\net6.0\ref\aplicacion.dll

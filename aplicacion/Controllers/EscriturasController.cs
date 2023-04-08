@@ -9,6 +9,7 @@ using aplicacion.models;
 using aplicacion.ViewModels;
 using Azure.Core;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace aplicacion.Controllers
 {
@@ -69,8 +70,22 @@ namespace aplicacion.Controllers
             var enan = new Enajenante();
             ViewBag.NumAtencion = ultimoNumAtencion;
             var model = new EscrituraViewModel();
-            model.Adquirentes.Add(new Adquirente());
-            model.Enajenantes.Add(new Enajenante());
+           
+
+            // Llamada a la API para obtener todas las comunas de Chile
+            var client = new HttpClient();
+            var comunas = new List<Comuna>();
+            /*
+            for (int i = 1; i <= 16; i++)
+            {
+                var response = client.GetAsync($"https://apis.digital.gob.cl/dpa/regiones/{i}/comunas").Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+                var regionComunas = JsonConvert.DeserializeObject<List<Comuna>>(result);
+                comunas.AddRange(regionComunas);
+            }
+            */  
+            model.Comunas = comunas;
+
             return View(model);
 
         }

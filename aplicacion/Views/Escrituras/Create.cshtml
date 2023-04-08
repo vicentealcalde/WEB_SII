@@ -97,7 +97,7 @@
                         </td>
                         <td>
                             <div class="form-group">
-                                
+
                                 <input asp-for="@Model.Escritura.Comuna" class="form-control" />
                                 <span asp-validation-for="@Model.Escritura.Comuna" class="text-danger"></span>
                             </div>
@@ -161,6 +161,29 @@
                 </table>
             </div>
         </div>
+        <script defer>
+            function cargarComunas() {
+                fetch('https://apis.digital.gob.cl/dpa/regiones/13/comunas')
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    console.log("llegan las comunas");
+                    .then(function (data) {
+                        var dropdown = document.getElementById('comunas');
+                        data.forEach(function (comuna) {
+                            var option = document.createElement('option');
+                            option.text = comuna.nombre;
+                            option.value = comuna.nombre;
+                            dropdown.add(option);
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log('Hubo un problema con la petición Fetch:' + error.message);
+                    });
+            }
+
+            document.addEventListener('DOMContentLoaded', cargarComunas);
+        </script>
         <div class="card">
             <div class="card-header bg-primary mb-3">
                 INFORMACIÓN DE LOS Enajenantes(S) O CAUSANTE(S)
@@ -226,9 +249,10 @@
                 // Cuando se selecciona una opción en el select
                 $('select').change(function () {
                     if ($(this).val() === 'regularizacion') {
+                        console.log("se esconde");
                        
                         // Si la opción seleccionada es "regularizacion", oculta el div
-                        $('Adquirientes').hide();
+                        $('#Adquirientes').hide();
                     } else {
                         // De lo contrario, muestra el div
                         $('#Adquirientes').show();
@@ -254,10 +278,6 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 
 @section Scripts {
@@ -297,7 +317,7 @@
                 } else if (i == 2) {
                     cell.innerHTML = '@Html.TextBoxFor(model => model.Adquirente.NumAtencion, new { @class = "form-control" })';
                 } else if (i == 3) {
-                    cell.innerHTML = '@Html.CheckBoxFor(model => model.Adquirente.PorcentajeDerechoNoAcreditado, new { @class = "form-control" })';
+                    cell.innerHTML = '@Html.CheckBoxFor(model => model.Adquirente.PorcentajeDerechoNoAcreditado, new { @class = "form-check-input" })';
                 } else if (i == 4) {
                     cell.innerHTML = '<button class="btn btn-danger" data-rowid="' + rowCount + '">Delete</button>';
                     // Add a click event listener to the new delete button
@@ -366,41 +386,96 @@
             }
         }
 
-        const selectComunas = document.getElementById('Comuna');
-
-        // Función para obtener las comunas de una región dada
-        function getComunas(region) {
-            const url = `https://apis.digital.gob.cl/dpa/regiones/${region}/comunas`;
-            return fetch(url).then(response => response.json());
+        function validarPorcentajeDerecho(models) {
+            let totalPorcentaje = 0;
+            let hayError = false;
+            models.forEach(model => {
+                if (model.Enajenante.PorcentajeDerecho < 0) {
+                    hayError = true;
+                } else if (model.Enajenante.PorcentajeDerechoNoAcreditado && model.Enajenante.PorcentajeDerecho !== 0) {
+                    hayError = true;
+                } else {
+                    totalPorcentaje += model.Enajenante.PorcentajeDerecho;
+                }
+            });
+            if (totalPorcentaje > 100) {
+                hayError = true;
+            }
+            return hayError;
         }
 
-        // Array con los números de regiones de Chile (1-16)
-        const regiones = [...Array(16).keys()].map(x => ++x);
+        document.getElementById("btnCreate").addEventListener("click", function () {
+            const models = obtenerDatosIngresados(); // función que obtiene los datos ingresados por el usuario
+            const hayError = validarPorcentajeDerecho(models);
+            if (hayError) {
+                // muestra ventana emergente con el mensaje de error
+            } else {
+                // guarda los datos ingresados en la base de datos
+            }
+        });
 
-        // Obtener las comunas de todas las regiones
-        Promise.all(regiones.map(getComunas))
-            .then(regionesComunas => {
-                // Concatenar las comunas de todas las regiones en un solo array
-                const comunas = regionesComunas.reduce((acumulador, comunasRegion) => {
-                    return acumulador.concat(comunasRegion);
-                }, []);
-                // Ordenar el array de comunas alfabéticamente
-                comunas.sort((a, b) => a.nombre.localeCompare(b.nombre));
-                // Agregar las opciones al select de comunas
-                comunas.forEach(comuna => {
-                    const option = document.createElement('option');
-                    option.value = comuna.nombre.toLowerCase();
-                    option.text = comuna.nombre;
-                    selectComunas.add(option);
-                });
-            })
-            .catch(error => console.error(error));
+        function validarPorcentajes() {
+            let sumaPorcentajes = 0;
+            let valoresNegativos = false;
+            let ceroNoAcreditado = false;
 
-      
-    
+            for (let model of models) {
+                if (model.Enajenante.PorcentajeDerecho < 0) {
+                    valoresNegativos = true;
+                }
+                if (model.Enajenante.PorcentajeDerechoNoAcreditado && model.Enajenante.PorcentajeDerecho === 0) {
+                    ceroNoAcreditado = true;
+                }
+                sumaPorcentajes += model.Enajenante.PorcentajeDerecho;
+            }
 
- 
-           
+            if (valoresNegativos) {
+                mostrarError("No puede haber porcentajes negativos.");
+                return false;
+            }
+
+            if (sumaPorcentajes > 100) {
+                mostrarError("La suma de los porcentajes no puede ser mayor a 100.");
+                return false;
+            }
+
+            if (ceroNoAcreditado && sumaPorcentajes < 100) {
+                mostrarError("Si PorcentajeDerechoNoAcreditado es true, la suma de los porcentajes debe ser igual a 100.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function mostrarError(mensaje) {
+            let divError = document.createElement("div");
+            divError.innerText = mensaje;
+            divError.style.position = "absolute";
+            divError.style.top = "0";
+            divError.style.left = "0";
+            divError.style.width = "100%";
+            divError.style.height = "100%";
+            divError.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+            divError.style.color = "white";
+            divError.style.display = "flex";
+            divError.style.justifyContent = "center";
+            divError.style.alignItems = "center";
+            divError.style.zIndex = "100";
+            document.body.appendChild(divError);
+
+            setTimeout(() => {
+                document.body.removeChild(divError);
+            }, 3000);
+        }
+
+        function crearModelos() {
+            if (!validarPorcentajes()) {
+                return;
+            }
+
+            // aquí va el código para crear los modelos
+        }
+
 
 
     </script>
