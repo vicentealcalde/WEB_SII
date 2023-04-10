@@ -249,7 +249,7 @@
                 // Cuando se selecciona una opción en el select
                 $('select').change(function () {
                     if ($(this).val() === 'regularizacion') {
-                        console.log("se esconde");
+                        
                        
                         // Si la opción seleccionada es "regularizacion", oculta el div
                         $('#Adquirientes').hide();
@@ -262,7 +262,82 @@
 
 
         </script>
-       
+       <script>
+            if ($(this).val() !== 'regularizacion') {
+                $(document).ready(function () {
+                    $('form').submit(function () {
+                        if ('input[name="Adquirente.RunRut"]'.length === 0) {
+                            alert('Debe existir minimo un Enajenante');
+                            return false; // Evita el envío del formulario
+
+                        }
+                        var adquirentePorcentajeTotal = 0;
+                        var hasError = false;
+
+                        // Suma los porcentajes de adquirente y verifica que no sean negativos
+                        $('input[name="Adquirente.PorcentajeDerecho"]').each(function () {
+                            var porcentaje = parseFloat($(this).val());
+                            if (isNaN(porcentaje) || porcentaje < 0) {
+                                hasError = true;
+                                return false;
+                            }
+                            if (porcentaje > 0 && $(this).siblings('input[name="Adquirente.PorcentajeDerechoNoAcreditado"]').val() !== "true") {
+                                adquirentePorcentajeTotal += porcentaje;
+                            }
+                        });
+
+                        // Verifica que la suma de los porcentajes sea menor o igual a 100
+                        if (adquirentePorcentajeTotal > 100) {
+                            hasError = true;
+                        }
+
+                        // Muestra mensaje de error si es necesario
+                        if (hasError) {
+                            alert('Por favor revise los porcentajes de Adquirente. La suma de los porcentajes no puede ser mayor a 100 y los valores no pueden ser negativos');
+                            return false; // Evita el envío del formulario
+                        }
+                    });
+                });
+            }
+
+       </script>
+        <script>
+            $(document).ready(function () {
+                $('form').submit(function () {
+                    if ('input[name="Enajenante.RunRut"]'.length === 0) {
+                        alert('Debe existir minimo un Enajenante');
+                        return false; // Evita el envío del formulario
+                    
+                    }
+                    var adquirentePorcentajeTotal = 0;
+                    var hasError = false;
+
+                    // Suma los porcentajes de adquirente y verifica que no sean negativos
+                    $('input[name="Enajenante.PorcentajeDerecho"]').each(function () {
+                        var porcentaje = parseFloat($(this).val());
+                        if (isNaN(porcentaje) || porcentaje < 0) {
+                            hasError = true;
+                            return false;
+                        }
+                        if (porcentaje > 0 && $(this).siblings('input[name="Enajenante.PorcentajeDerechoNoAcreditado"]').val() !== "true") {
+                            adquirentePorcentajeTotal += porcentaje;
+                        }
+                    });
+
+                    // Verifica que la suma de los porcentajes sea menor o igual a 100
+                    if (adquirentePorcentajeTotal > 100) {
+                        hasError = true;
+                    }
+
+                    // Muestra mensaje de error si es necesario
+                    if (hasError) {
+                        alert('Por favor revise los porcentajes de Enajenante. La suma de los porcentajes no puede ser mayor a 100 y los valores no pueden ser negativos');
+                        return false; // Evita el envío del formulario
+                    }
+                });
+            });
+
+        </script>
 
         <div class="form-group">
             <input type="submit" value="Create" class="btn btn-primary" />
@@ -386,97 +461,6 @@
             }
         }
 
-        function validarPorcentajeDerecho(models) {
-            let totalPorcentaje = 0;
-            let hayError = false;
-            models.forEach(model => {
-                if (model.Enajenante.PorcentajeDerecho < 0) {
-                    hayError = true;
-                } else if (model.Enajenante.PorcentajeDerechoNoAcreditado && model.Enajenante.PorcentajeDerecho !== 0) {
-                    hayError = true;
-                } else {
-                    totalPorcentaje += model.Enajenante.PorcentajeDerecho;
-                }
-            });
-            if (totalPorcentaje > 100) {
-                hayError = true;
-            }
-            return hayError;
-        }
-
-        document.getElementById("btnCreate").addEventListener("click", function () {
-            const models = obtenerDatosIngresados(); // función que obtiene los datos ingresados por el usuario
-            const hayError = validarPorcentajeDerecho(models);
-            if (hayError) {
-                // muestra ventana emergente con el mensaje de error
-            } else {
-                // guarda los datos ingresados en la base de datos
-            }
-        });
-
-        function validarPorcentajes() {
-            let sumaPorcentajes = 0;
-            let valoresNegativos = false;
-            let ceroNoAcreditado = false;
-
-            for (let model of models) {
-                if (model.Enajenante.PorcentajeDerecho < 0) {
-                    valoresNegativos = true;
-                }
-                if (model.Enajenante.PorcentajeDerechoNoAcreditado && model.Enajenante.PorcentajeDerecho === 0) {
-                    ceroNoAcreditado = true;
-                }
-                sumaPorcentajes += model.Enajenante.PorcentajeDerecho;
-            }
-
-            if (valoresNegativos) {
-                mostrarError("No puede haber porcentajes negativos.");
-                return false;
-            }
-
-            if (sumaPorcentajes > 100) {
-                mostrarError("La suma de los porcentajes no puede ser mayor a 100.");
-                return false;
-            }
-
-            if (ceroNoAcreditado && sumaPorcentajes < 100) {
-                mostrarError("Si PorcentajeDerechoNoAcreditado es true, la suma de los porcentajes debe ser igual a 100.");
-                return false;
-            }
-
-            return true;
-        }
-
-        function mostrarError(mensaje) {
-            let divError = document.createElement("div");
-            divError.innerText = mensaje;
-            divError.style.position = "absolute";
-            divError.style.top = "0";
-            divError.style.left = "0";
-            divError.style.width = "100%";
-            divError.style.height = "100%";
-            divError.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-            divError.style.color = "white";
-            divError.style.display = "flex";
-            divError.style.justifyContent = "center";
-            divError.style.alignItems = "center";
-            divError.style.zIndex = "100";
-            document.body.appendChild(divError);
-
-            setTimeout(() => {
-                document.body.removeChild(divError);
-            }, 3000);
-        }
-
-        function crearModelos() {
-            if (!validarPorcentajes()) {
-                return;
-            }
-
-            // aquí va el código para crear los modelos
-        }
-
-
-
+            
     </script>
 }
