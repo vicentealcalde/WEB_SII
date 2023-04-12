@@ -161,29 +161,6 @@
                 </table>
             </div>
         </div>
-        <script defer>
-            function cargarComunas() {
-                fetch('https://apis.digital.gob.cl/dpa/regiones/13/comunas')
-                    .then(function (response) {
-                        return response.json();
-                    })
-                    console.log("llegan las comunas");
-                    .then(function (data) {
-                        var dropdown = document.getElementById('comunas');
-                        data.forEach(function (comuna) {
-                            var option = document.createElement('option');
-                            option.text = comuna.nombre;
-                            option.value = comuna.nombre;
-                            dropdown.add(option);
-                        });
-                    })
-                    .catch(function (error) {
-                        console.log('Hubo un problema con la petición Fetch:' + error.message);
-                    });
-            }
-
-            document.addEventListener('DOMContentLoaded', cargarComunas);
-        </script>
         <div class="card">
             <div class="card-header bg-primary mb-3">
                 INFORMACIÓN DE LOS Enajenantes(S) O CAUSANTE(S)
@@ -196,8 +173,6 @@
                         <th>RUT</th>
 
                         <th>% Derechos</th>
-
-                        <th>NUmero de Atencion</th>
 
                         <th>Porcentaje Derecho no Acreditado</th>
 
@@ -222,8 +197,6 @@
                         <th>RUT</th>
 
                         <th>% Derechos</th>
-
-                        <th>NUmero de Atencion</th>
 
                         <th>Porcentaje Derecho no Acreditado</th>
 
@@ -307,20 +280,23 @@
                     if ('input[name="Enajenante.RunRut"]'.length === 0) {
                         alert('Debe existir minimo un Enajenante');
                         return false; // Evita el envío del formulario
-                    
+
                     }
                     var adquirentePorcentajeTotal = 0;
                     var hasError = false;
 
                     // Suma los porcentajes de adquirente y verifica que no sean negativos
                     $('input[name="Enajenante.PorcentajeDerecho"]').each(function () {
-                        var porcentaje = parseFloat($(this).val());
-                        if (isNaN(porcentaje) || porcentaje < 0) {
-                            hasError = true;
-                            return false;
-                        }
-                        if (porcentaje > 0 && $(this).siblings('input[name="Enajenante.PorcentajeDerechoNoAcreditado"]').val() !== "true") {
-                            adquirentePorcentajeTotal += porcentaje;
+                        
+                        if ($(this).siblings('input[name="Enajenante.PorcentajeDerechoNoAcreditado"]').val() !== true ) {
+                            var porcentaje = parseFloat($(this).val());
+                            if (isNaN(porcentaje) || porcentaje < 0) {
+                                hasError = true;
+                                return false;
+                            }
+                            if (porcentaje > 0) {
+                                adquirentePorcentajeTotal += porcentaje;
+                            }
                         }
                     });
 
@@ -384,24 +360,20 @@
             var row = table.insertRow(rowCount);
             for (var i = 0; i < cellCount; i++) {
                 var cell = row.insertCell(i);
-
                 if (i == 0) {
                     cell.innerHTML = '@Html.TextBoxFor(model => model.Adquirente.RunRut, new { @class = "form-control" })';
                 } else if (i == 1) {
                     cell.innerHTML = '@Html.TextBoxFor(model => model.Adquirente.PorcentajeDerecho, new { @class = "form-control" })';
                 } else if (i == 2) {
-                    cell.innerHTML = '@Html.TextBoxFor(model => model.Adquirente.NumAtencion, new { @class = "form-control" })';
-                } else if (i == 3) {
-                    cell.innerHTML = '@Html.CheckBoxFor(model => model.Adquirente.PorcentajeDerechoNoAcreditado, new { @class = "form-check-input" })';
-                } else if (i == 4) {
+                    cell.innerHTML = '@Html.CheckBoxFor(model => model.Adquirente.PorcentajeDerechoNoAcreditado, new { @class = "form-check-input", onclick = "checkPorcentaje(this)" })';
+                } else {
                     cell.innerHTML = '<button class="btn btn-danger" data-rowid="' + rowCount + '">Delete</button>';
-                    // Add a click event listener to the new delete button
-                    var newDeleteButton = row.querySelector('button[data-rowid="' + rowCount + '"]');
-                    newDeleteButton.addEventListener('click', function () {
-                        deleteRow(tableId, this);
-                    });
                 }
             }
+            // Add a click event listener to the new delete button
+            var newDeleteButton = row.querySelector('button[data-rowid="' + rowCount + '"]');
+            newDeleteButton.addEventListener('click', function () { deleteRow(tableId, this); });
+
         }
         function addNewRowE() {
             var table = document.getElementById("Enajenante");
@@ -415,9 +387,7 @@
                 } else if (i == 1) {
                     cell.innerHTML = '@Html.TextBoxFor(model => model.Enajenante.PorcentajeDerecho, new { @class = "form-control" })';
                 } else if (i == 2) {
-                    cell.innerHTML = '@Html.TextBoxFor(model => model.Enajenante.NumAtencion, new { @class = "form-control" })';
-                } else if (i == 3) {
-                    cell.innerHTML = '@Html.CheckBoxFor(model => model.Enajenante.PorcentajeDerechoNoAcreditado, new { @class = "form-check-input" })';
+                    cell.innerHTML = '@Html.CheckBoxFor(model => model.Enajenante.PorcentajeDerechoNoAcreditado, new { @class = "form-check-input", onclick = "checkPorcentaje(this)" })';
                 } else {
                     cell.innerHTML = '<button class="btn btn-danger" data-rowid="' + rowCount + '">Delete</button>';
                 }
@@ -428,21 +398,21 @@
 
         }
 
-        /* This method will delete a row */
-        function deleteRow(ele) {
-            var table = document.getElementById("Adquirente");
-            var rowCount = table.rows.length;
-            if (rowCount <= 1) {
-                alert("There is no row available to delete!");
-                return;
-            }
-            if (ele) {
-                //delete specific row
-                ele.parentNode.parentNode.remove();
+        function checkPorcentaje(cb) {
+            var row = cb.parentNode.parentNode;
+            var porcentajeInput = row.cells[1].querySelector('input[type="text"]');
+            if (cb.checked) {
+                porcentajeInput.value = '0';
+                porcentajeInput.disabled = true;
             } else {
-                //delete last row
-                table.deleteRow(rowCount - 1);
+                porcentajeInput.value = '';
+                porcentajeInput.disabled = false;
             }
+        }
+
+        function deleteRow(table, button) {
+            var row = button.parentNode.parentNode;
+            table.deleteRow(row.rowIndex);
         }
 
         function deleteRowE(ele) {

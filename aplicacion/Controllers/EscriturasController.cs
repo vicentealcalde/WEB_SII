@@ -124,7 +124,7 @@ namespace aplicacion.Controllers
             {
                 var adquirente = new Adquirente
                 {
-                    NumAtencion = int.Parse(EnajenanteNumAtencion[i]),
+                     NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
                     RunRut = EnajenateRun[i],
                     PorcentajeDerecho = double.Parse(EnajenantePorcentajeDerecho[i]),
                     PorcentajeDerechoNoAcreditado = bool.Parse(EnajenantePorcentajeDerechoNoAcreditado[i]),
@@ -140,14 +140,14 @@ namespace aplicacion.Controllers
                 var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
                 var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
                 //List<double> EnajenantePorcentajeDerecho = EPorcentajeDerecho.ConvertAll(x => double.Parse(x));
-                var AdquirenteNumAtencion = (Request.Form["Adquirente.NumAtencion"].ToString()).Split(",");
+                //var AdquirenteNumAtencion = (Request.Form["Adquirente.NumAtencion"].ToString()).Split(",");
                 var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
 
                 for (int i = 0; i < AdquirienteRun.Length; i++)
                 {
                     var enajenante = new Enajenante
                     {
-                        NumAtencion = int.Parse(EnajenanteNumAtencion[i]),
+                        NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
                         RunRut = AdquirienteRun[i],
                         PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]),
                         PorcentajeDerechoNoAcreditado = bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]),
