@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\aplicacion",
-    "\\aplicacion\\Controllers",
-    "\\aplicacion\\Views",
-    "\\aplicacion\\Views\\Escrituras"
+    ""
   ],
-  "SelectedNode": "\\aplicacion\\Views\\Escrituras\\Create.cshtml",
+  "SelectedNode": "\\aplicacion.sln",
   "PreviewInSolutionExplorer": false
 }

@@ -10,6 +10,8 @@ using aplicacion.ViewModels;
 using Azure.Core;
 using System.Globalization;
 using Newtonsoft.Json;
+using System.Web;
+using Microsoft.AspNetCore.Http;
 
 namespace aplicacion.Controllers
 {
@@ -70,22 +72,7 @@ namespace aplicacion.Controllers
             var enan = new Enajenante();
             ViewBag.NumAtencion = ultimoNumAtencion;
             var model = new EscrituraViewModel();
-           
-
-            // Llamada a la API para obtener todas las comunas de Chile
-            var client = new HttpClient();
-            var comunas = new List<Comuna>();
-            /*
-            for (int i = 1; i <= 16; i++)
-            {
-                var response = client.GetAsync($"https://apis.digital.gob.cl/dpa/regiones/{i}/comunas").Result;
-                var result = response.Content.ReadAsStringAsync().Result;
-                var regionComunas = JsonConvert.DeserializeObject<List<Comuna>>(result);
-                comunas.AddRange(regionComunas);
-            }
-            */  
-            model.Comunas = comunas;
-
+       
             return View(model);
 
         }
@@ -97,12 +84,12 @@ namespace aplicacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EscrituraViewModel escrituraViewModel)
         {
-            Console.WriteLine("Hola como estas");
+            
             var dbContext = new EscriturasContext();
             var NumAtencion = dbContext.Escrituras.OrderByDescending(e => e.FechaInscripcion).Select(e => e.NumAtencion).FirstOrDefault();
             NumAtencion = NumAtencion + 1;
-            Console.WriteLine("entre a if ");
-            Console.WriteLine(escrituraViewModel.Escritura.Cne);
+            
+            
             var escritura = new Escritura
             {
                 Cne = escrituraViewModel.Escritura.Cne,
@@ -113,36 +100,58 @@ namespace aplicacion.Controllers
                 FechaInscripcion = escrituraViewModel.Escritura.FechaInscripcion,
                 NumeroInscripcion = escrituraViewModel.Escritura.NumeroInscripcion
             };
-            Console.WriteLine("Cree escritura");
-           
-            var EnajenateRun = (Request.Form["Enajenate.RunRut"].ToString()).Split(",");
-            var EnajenantePorcentajeDerecho = (Request.Form["Enajenante.PorcentajeDerecho"].ToString()).Split(",");
-            //List<double> EnajenantePorcentajeDerecho = EPorcentajeDerecho.ConvertAll(x => double.Parse(x));
-            var EnajenanteNumAtencion = (Request.Form["Enajenante.NumAtencion"].ToString()).Split(",");
-            var EnajenantePorcentajeDerechoNoAcreditado = (Request.Form["Enajenante.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
-            for (int i = 0; i < EnajenateRun.Length; i++)
-            {
-                var adquirente = new Adquirente
-                {
-                     NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
-                    RunRut = EnajenateRun[i],
-                    PorcentajeDerecho = double.Parse(EnajenantePorcentajeDerecho[i]),
-                    PorcentajeDerechoNoAcreditado = bool.Parse(EnajenantePorcentajeDerechoNoAcreditado[i]),
-                    NumAtencionNavigation = escritura
-                };
-
-                escritura.Adquirentes.Add(adquirente);
-
-            }
 
             if (escritura.Cne == "compraventa")
             {
-                var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
-                var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
+                var EnajenateRun = (Request.Form["Enajenate.RunRut"].ToString()).Split(",");
+                var EnajenantePorcentajeDerecho = (Request.Form["Enajenante.PorcentajeDerecho"].ToString()).Split(",");
                 //List<double> EnajenantePorcentajeDerecho = EPorcentajeDerecho.ConvertAll(x => double.Parse(x));
-                //var AdquirenteNumAtencion = (Request.Form["Adquirente.NumAtencion"].ToString()).Split(",");
-                var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
+                var EnajenanteNumAtencion = (Request.Form["Enajenante.NumAtencion"].ToString()).Split(",");
+                var EnajenantePorcentajeDerechoNoAcreditado = (Request.Form["Enajenante.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
+                for (int i = 0; i < EnajenateRun.Length; i++)
+                {
+                    var adquirente = new Adquirente
+                    {
+                        NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                        RunRut = EnajenateRun[i],
+                        PorcentajeDerecho = double.Parse(EnajenantePorcentajeDerecho[i]),
+                        PorcentajeDerechoNoAcreditado = bool.Parse(EnajenantePorcentajeDerechoNoAcreditado[i]),
+                        NumAtencionNavigation = escritura
+                    };
 
+                    escritura.Adquirentes.Add(adquirente);
+
+                }
+            }
+
+            
+            var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
+            var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
+            //List<double> EnajenantePorcentajeDerecho = EPorcentajeDerecho.ConvertAll(x => double.Parse(x));
+            //var AdquirenteNumAtencion = (Request.Form["Adquirente.NumAtencion"].ToString()).Split(",");
+            var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
+            double porcentajeConcedido = 0;
+            int cantidad = 0;
+            for (int i = 0; i < AdquirienteRun.Length; i++)
+            {
+                porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
+                if (bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]) == true)
+                {
+                    cantidad ++;
+                }
+            }
+
+            if (porcentajeConcedido < 100 && cantidad > 0)
+            {
+                double porcentajeSobrante = (100.0 - porcentajeConcedido) / cantidad;
+                for (int i = 0; i < AdquirienteRun.Length; i++)
+                {
+                    if (bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]) == true)
+                    {
+                        AdquirentePorcentajeDerecho[i] = porcentajeSobrante.ToString();
+                    }
+                }  
+            }
                 for (int i = 0; i < AdquirienteRun.Length; i++)
                 {
                     var enajenante = new Enajenante
@@ -157,12 +166,33 @@ namespace aplicacion.Controllers
                     escritura.Enajenantes.Add(enajenante);
 
                 }
-            }
 
+
+            for (int i = 0; i < AdquirienteRun.Length; i++)
+            {
+                var multipropietario = new Multipropietario
+                {
+                    Comuna = escrituraViewModel.Escritura.Comuna,
+                    Manzana = int.Parse(escrituraViewModel.Escritura.Manzana),
+                    Predio = int.Parse(escrituraViewModel.Escritura.Predio),
+                    Fojas = escrituraViewModel.Escritura.Fojas,
+                    FechaInscripcion = escrituraViewModel.Escritura.FechaInscripcion,
+                    NumeroInscripcion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                    RunRut = AdquirienteRun[i],
+                    AnoInscripcion = int.Parse(escrituraViewModel.Escritura.FechaInscripcion.Year.ToString()),
+                    AnoVigenciaInicial = int.Parse(escrituraViewModel.Escritura.FechaInscripcion.Year.ToString()),
+                    AnoVigenciaFinal = 0,
+                    PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i])
+                   
+                };
+
+                _context.Add(multipropietario);
+
+            }
+            
+            
             _context.Escrituras.Add(escritura);
             await _context.SaveChangesAsync();
-
-
             return RedirectToAction(nameof(Index));
             
             //return View(escrituraViewModel);
