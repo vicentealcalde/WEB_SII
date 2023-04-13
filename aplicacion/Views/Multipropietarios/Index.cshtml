@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    // el searchDate es la consulta sql
 }
 
 <h1>Index</h1>
@@ -11,7 +12,15 @@
     <div class="grid-container">
         <div class="section1">Comuna</div> <input type="text" name="SearchString" />
         <div class="section1">Rol </div>   <input type="number" /> <input type="number" />
-        <div class="section1">Año </div>  <input type="number" name="searchDate" />
+        <div class="section1">Año </div> 
+        <select id="searchDate" name="searchDate">
+            <option value=0></option>
+            <option value=2019>2019</option>
+            <option value=2020>2020</option>
+            <option value=2021>2021</option>
+            <option value=2022>2022</option>
+            <option value=2023>2023</option>
+        </select>
     </div>
         <input type="submit" value="Buscar" />
 </form>
@@ -19,56 +28,73 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.RunRut)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Comuna)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PorcentajeDerecho)
+                @Html.DisplayNameFor(model => model.Manzana)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Fojas)
+                @Html.DisplayNameFor(model => model.Predio)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumeroInscripcion)
+                @Html.DisplayNameFor(model => model.FechaInscripcion)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AnoInscripcion)
+                AÑO
+            </th>
+            <th>
+                NUMERO
+            </th>
+            <th>
+                RUT
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.FechaInscripcion)
+                % DERECHO
+            </th>
+            <th>
+                V INICIAL
+            </th>
+            <th>
+                V FINAL
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                    @Html.DisplayFor(modelItem => item.RunRut)
-            </td>
- 
+        <tr>            
             <td>
                     @Html.DisplayFor(modelItem => item.Comuna)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.PorcentajeDerecho) %
+                    @Html.DisplayFor(modelItem => item.Manzana)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.Fojas)
+                    @Html.DisplayFor(modelItem => item.Predio)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.NumeroInscripcion)
+                    @Html.DisplayFor(modelItem => item.FechaInscripcion)
             </td>
             <td>
                     @Html.DisplayFor(modelItem => item.AnoInscripcion)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.FechaInscripcion)
+                    @Html.DisplayFor(modelItem => item.NumeroInscripcion)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.RunRut)
             </td>
 
+            <td>
+                    @Html.DisplayFor(modelItem => item.PorcentajeDerecho) %
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.AnoVigenciaInicial) 
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.AnoVigenciaFinal)
+            </td>
         </tr>
 }
     </tbody>

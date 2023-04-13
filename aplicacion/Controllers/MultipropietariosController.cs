@@ -19,7 +19,7 @@ namespace aplicacion.Controllers
         }
 
         // GET: Multipropietarios
-        public async Task<IActionResult> Index(string searchString, string searchDate)
+        public async Task<IActionResult> Index(string searchString, int searchDate)
         {
             if (_context.Multipropietarios == null)
             {
@@ -28,14 +28,25 @@ namespace aplicacion.Controllers
 
             var Multi = from m in _context.Multipropietarios
                          select m;
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 Multi = Multi.Where(s => s.Comuna!.Contains(searchString));
             }
-            if (!String.IsNullOrEmpty(searchDate))
+            /*
+            if (!string.IsNullOrEmpty(searchDate))
             {
                 Multi = Multi.Where(s => s.AnoInscripcion.ToString()!.Contains(searchDate));
             }
+            */
+            if (!string.IsNullOrEmpty(searchDate.ToString()) && searchDate != 0)
+            {
+                if(searchDate >= 2019)
+                {
+                    Multi = Multi.Where(s => s.AnoVigenciaInicial <= searchDate && s.AnoVigenciaFinal >= searchDate);
+                }
+               
+            }
+            //vInicial <= searchDate.toParse() <= vFinal
             return View(await Multi.ToListAsync());
         /*
             return _context.Multipropietarios != null ? 
