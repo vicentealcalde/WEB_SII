@@ -167,7 +167,19 @@ namespace aplicacion.Controllers
 
                 }
 
+            var multipropietarios = _context.Multipropietarios
+            .Where(m => m.Comuna == escrituraViewModel.Escritura.Comuna && m.Manzana == int.Parse(escrituraViewModel.Escritura.Manzana) && m.Predio == int.Parse(escrituraViewModel.Escritura.Predio))
+            .ToList();
+            foreach (Multipropietario multipropietario in multipropietarios )
+            {
+                if (multipropietario.AnoVigenciaFinal == 0)
+                {
+                    multipropietario.AnoVigenciaFinal = int.Parse(escrituraViewModel.Escritura.FechaInscripcion.Year.ToString());
+                    _context.Update(multipropietario);
+                   
+                }
 
+            }
             for (int i = 0; i < AdquirienteRun.Length; i++)
             {
                 var multipropietario = new Multipropietario
