@@ -129,9 +129,8 @@ namespace aplicacion.Controllers
             
             var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
             var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
-            //List<double> EnajenantePorcentajeDerecho = EPorcentajeDerecho.ConvertAll(x => double.Parse(x));
-            //var AdquirenteNumAtencion = (Request.Form["Adquirente.NumAtencion"].ToString()).Split(",");
             var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
+           
             double porcentajeConcedido = 0;
             int cantidad = 0;
             for (int i = 0; i < AdquirienteRun.Length; i++)
@@ -154,20 +153,20 @@ namespace aplicacion.Controllers
                     }
                 }  
             }
-                for (int i = 0; i < AdquirienteRun.Length; i++)
+            for (int i = 0; i < AdquirienteRun.Length; i++)
+            {
+                var enajenante = new Enajenante
                 {
-                    var enajenante = new Enajenante
-                    {
-                        NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
-                        RunRut = AdquirienteRun[i],
-                        PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]),
-                        PorcentajeDerechoNoAcreditado = bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]),
-                        NumAtencionNavigation = escritura
-                    };
+                    NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                    RunRut = AdquirienteRun[i],
+                    PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]),
+                    PorcentajeDerechoNoAcreditado = bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]),
+                    NumAtencionNavigation = escritura
+                };
 
-                    escritura.Enajenantes.Add(enajenante);
+                escritura.Enajenantes.Add(enajenante);
 
-                }
+            }
 
             var multipropietarios = _context.Multipropietarios
             .Where(m => m.Comuna == escrituraViewModel.Escritura.Comuna && m.Manzana == int.Parse(escrituraViewModel.Escritura.Manzana) && m.Predio == int.Parse(escrituraViewModel.Escritura.Predio))
@@ -182,22 +181,39 @@ namespace aplicacion.Controllers
                 }
 
             }
+            double sumaPorcentajeDerecho = 0.0;
+            double restaPorcentaje = 0.0;
             for (int i = 0; i < AdquirienteRun.Length; i++)
             {
+                sumaPorcentajeDerecho += double.Parse(AdquirentePorcentajeDerecho[i]);
+            }
+            restaPorcentaje = 100 - sumaPorcentajeDerecho;
+            double promedioPorcentajeDerecho = restaPorcentaje / AdquirienteRun.Length;
+            for (int i = 0; i < AdquirienteRun.Length; i++)
+            {
+                DateTime preYear;
+                preYear = escrituraViewModel.Escritura.FechaInscripcion;
+                if (escrituraViewModel.Escritura.FechaInscripcion.Year < 2019)
+                {
+                    preYear = new DateTime(2019,
+                        escrituraViewModel.Escritura.FechaInscripcion.Month, 
+                        escrituraViewModel.Escritura.FechaInscripcion.Day);
+                }
+
                 var multipropietario = new Multipropietario
                 {
                     Comuna = escrituraViewModel.Escritura.Comuna,
                     Manzana = int.Parse(escrituraViewModel.Escritura.Manzana),
                     Predio = int.Parse(escrituraViewModel.Escritura.Predio),
                     Fojas = escrituraViewModel.Escritura.Fojas,
-                    FechaInscripcion = escrituraViewModel.Escritura.FechaInscripcion,
+                    FechaInscripcion = preYear,
                     NumeroInscripcion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
                     RunRut = AdquirienteRun[i],
-                    AnoInscripcion = int.Parse(escrituraViewModel.Escritura.FechaInscripcion.Year.ToString()),
-                    AnoVigenciaInicial = int.Parse(escrituraViewModel.Escritura.FechaInscripcion.Year.ToString()),
+                    AnoInscripcion = int.Parse(preYear.Year.ToString()),
+                    AnoVigenciaInicial = int.Parse(preYear.Year.ToString()),
                     AnoVigenciaFinal = 0,
-                    PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i])
-                   
+                    PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]) + promedioPorcentajeDerecho
+
                 };
 
                 _context.Add(multipropietario);

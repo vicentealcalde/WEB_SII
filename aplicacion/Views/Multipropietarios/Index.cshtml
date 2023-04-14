@@ -68,11 +68,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var multipropietario in @Model.Multipropietarios)
+        @foreach (var multipropietario in @Model.Multipropietarios.OrderByDescending(m => m.AnoInscripcion))
         {
         <tr>            
             <td>
-                @multipropietario.Comuna
+                    @multipropietario.Comuna
             </td>
             <td>
                     @multipropietario.Manzana
