@@ -73,7 +73,7 @@ namespace aplicacion.Controllers
             var enan = new Enajenante();
             ViewBag.NumAtencion = ultimoNumAtencion;
             var model = new EscrituraViewModel();
-            var nombresComunas = new Models.NombresComunas();
+            var nombresComunas = new Models.ConstantsAndList();
             model.Comunas = nombresComunas.ListComunas;
             return View(model);
 

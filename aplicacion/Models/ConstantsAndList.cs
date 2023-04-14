@@ -1,6 +1,6 @@
 ﻿namespace aplicacion.Models
 {
-    public class NombresComunas
+    public class ConstantsAndList
     {
         public List<string> ListComunas { get; set; } = new List<string>
         {

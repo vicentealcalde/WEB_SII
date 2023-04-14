@@ -34,34 +34,23 @@ namespace aplicacion.Controllers
             {
                 Multi = Multi.Where(s => s.Comuna!.Contains(searchString));
             }
-            /*
-            if (!string.IsNullOrEmpty(searchDate))
-            {
-                Multi = Multi.Where(s => s.AnoInscripcion.ToString()!.Contains(searchDate));
-            }
-            */
+
             if (!string.IsNullOrEmpty(searchDate.ToString()) && searchDate != 0)
             {
                 if(searchDate >= 2019)
                 {
-                    Multi = Multi.Where(s => s.AnoVigenciaInicial <= searchDate && s.AnoVigenciaFinal >= searchDate);
+                    Multi = Multi.Where(s => s.AnoVigenciaInicial <= searchDate && (s.AnoVigenciaFinal >= searchDate || s.AnoVigenciaFinal == 0));
                 }
                
             }
-            var nombresComunas = new Models.NombresComunas();
+            var nombresComunas = new Models.ConstantsAndList();
             var viewModel = new MultipropietarioViewModel
             {
                 Multipropietarios = await Multi.ToListAsync(),
                 Comunas = nombresComunas.ListComunas
             };
 
-            //vInicial <= searchDate.toParse() <= vFinal
             return View(viewModel);
-        /*
-            return _context.Multipropietarios != null ? 
-                          View(await _context.Multipropietarios.ToListAsync()) :
-                          Problem("Entity set 'EscriturasContext.Multipropietarios'  is null.");
-        */
         }
 
         // GET: Multipropietarios/Details/5

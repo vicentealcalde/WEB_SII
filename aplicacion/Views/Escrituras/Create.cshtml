@@ -99,7 +99,7 @@
                         <td>
                          <div class="form-group">
                             <label asp-for="@Model.Escritura.Comuna" class="control-label"></label>
-                            <select asp-for="@Model.Escritura.Comuna" asp-items="@(new SelectList(Model.Comunas))" class="form-control">
+                                <select asp-for="@Model.Escritura.Comuna" asp-items="@(new SelectList(Model.Comunas.OrderBy(c => c)))" class="form-control">
                             </select>
                             <span asp-validation-for="@Model.Escritura.Comuna" class="text-danger"></span>
                         </div>
@@ -234,49 +234,40 @@
                     }
                 });
             });
+            $(document).ready(function () {
+                $('form').submit(function () {
+                    if ('input[name="Adquirente.RunRut"]'.length === 0) {
+                        alert('Debe existir minimo un Enajenante');
+                        return false; // Evita el envío del formulario
 
+                    }
+                    var adquirentePorcentajeTotal = 0;
+                    var hasError = false;
 
-        </script>
-       <script>
-            
-                $(document).ready(function () {
-                    $('form').submit(function () {
-                        if ('input[name="Adquirente.RunRut"]'.length === 0) {
-                            alert('Debe existir minimo un Enajenante');
-                            return false; // Evita el envío del formulario
-
-                        }
-                        var adquirentePorcentajeTotal = 0;
-                        var hasError = false;
-
-                        // Suma los porcentajes de adquirente y verifica que no sean negativos
-                        $('input[name="Adquirente.PorcentajeDerecho"]').each(function () {
-                            var porcentaje = parseFloat($(this).val());
-                            if (isNaN(porcentaje) || porcentaje < 0) {
-                                hasError = true;
-                                return false;
-                            }
-                            if (porcentaje > 0 && $(this).siblings('input[name="Adquirente.PorcentajeDerechoNoAcreditado"]').val() !== "true") {
-                                adquirentePorcentajeTotal += porcentaje;
-                            }
-                        });
-
-                        // Verifica que la suma de los porcentajes sea menor o igual a 100
-                        if (adquirentePorcentajeTotal > 100) {
+                    // Suma los porcentajes de adquirente y verifica que no sean negativos
+                    $('input[name="Adquirente.PorcentajeDerecho"]').each(function () {
+                        var porcentaje = parseFloat($(this).val());
+                        if (isNaN(porcentaje) || porcentaje < 0) {
                             hasError = true;
+                            return false;
                         }
-
-                        // Muestra mensaje de error si es necesario
-                        if (hasError) {
-                            alert('Por favor revise los porcentajes de Adquirente. La suma de los porcentajes no puede ser mayor a 100 y los valores no pueden ser negativos');
-                            return false; // Evita el envío del formulario
+                        if (porcentaje > 0 && $(this).siblings('input[name="Adquirente.PorcentajeDerechoNoAcreditado"]').val() !== "true") {
+                            adquirentePorcentajeTotal += porcentaje;
                         }
                     });
-                });
-            
 
-       </script>
-        <script>
+                    // Verifica que la suma de los porcentajes sea menor o igual a 100
+                    if (adquirentePorcentajeTotal > 100) {
+                        hasError = true;
+                    }
+
+                    // Muestra mensaje de error si es necesario
+                    if (hasError) {
+                        alert('Por favor revise los porcentajes de Adquirente. La suma de los porcentajes no puede ser mayor a 100 y los valores no pueden ser negativos');
+                        return false; // Evita el envío del formulario
+                    }
+                });
+            });
             $(document).ready(function () {
                 $('form').submit(function () {
                     if ('input[name="Enajenante.RunRut"]'.length === 0) {

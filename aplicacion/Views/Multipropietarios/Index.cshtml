@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Index";
-    // el searchDate es la consulta sql
 }
 
 <h1>Index</h1>
@@ -13,7 +12,7 @@
         <div class="section1">Comuna</div>
         <select name="SearchString">
             <option value="">--Seleccione una comuna--</option>
-            @foreach (var comuna in Model.Comunas)
+            @foreach (var comuna in Model.Comunas.OrderBy(c => c))
             {
                 <option value="@comuna">@comuna</option>
             }
@@ -108,8 +107,3 @@
 }
     </tbody>
 </table>
-
-<style>
-
-
-</style>
