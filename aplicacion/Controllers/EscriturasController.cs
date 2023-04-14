@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 
+
 namespace aplicacion.Controllers
 {
     public class EscriturasController : Controller
@@ -72,7 +73,8 @@ namespace aplicacion.Controllers
             var enan = new Enajenante();
             ViewBag.NumAtencion = ultimoNumAtencion;
             var model = new EscrituraViewModel();
-       
+            var nombresComunas = new Models.NombresComunas();
+            model.Comunas = nombresComunas.ListComunas;
             return View(model);
 
         }

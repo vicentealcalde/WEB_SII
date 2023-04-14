@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using aplicacion.models;
+using aplicacion.ViewModels;
+
 
 namespace aplicacion.Controllers
 {
@@ -46,8 +48,15 @@ namespace aplicacion.Controllers
                 }
                
             }
+            var nombresComunas = new Models.NombresComunas();
+            var viewModel = new MultipropietarioViewModel
+            {
+                Multipropietarios = await Multi.ToListAsync(),
+                Comunas = nombresComunas.ListComunas
+            };
+
             //vInicial <= searchDate.toParse() <= vFinal
-            return View(await Multi.ToListAsync());
+            return View(viewModel);
         /*
             return _context.Multipropietarios != null ? 
                           View(await _context.Multipropietarios.ToListAsync()) :

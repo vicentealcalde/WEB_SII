@@ -1,4 +1,4 @@
-﻿@model IEnumerable<aplicacion.models.Multipropietario>
+﻿@model aplicacion.ViewModels.MultipropietarioViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -10,7 +10,14 @@
 
 <form asp-controller="Multipropietarios" asp-action="Index" method="get">
     <div class="grid-container">
-        <div class="section1">Comuna</div> <input type="text" name="SearchString" />
+        <div class="section1">Comuna</div>
+        <select name="SearchString">
+            <option value="">--Seleccione una comuna--</option>
+            @foreach (var comuna in Model.Comunas)
+            {
+                <option value="@comuna">@comuna</option>
+            }
+        </select>
         <div class="section1">Rol </div>   <input type="number" /> <input type="number" />
         <div class="section1">Año </div> 
         <select id="searchDate" name="searchDate">
@@ -28,16 +35,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Comuna)
+                COMUNA
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Manzana)
+                MANZANA
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Predio)
+                PREDIOA
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FechaInscripcion)
+                FECHA INSCRIPCION
             </th>
             <th>
                 AÑO
@@ -62,38 +69,40 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var multipropietario in @Model.Multipropietarios)
+        {
         <tr>            
             <td>
-                    @Html.DisplayFor(modelItem => item.Comuna)
+                @multipropietario.Comuna
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.Manzana)
+                    @multipropietario.Manzana
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.Predio)
+                    @multipropietario.Predio
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.FechaInscripcion)
+                    @multipropietario.FechaInscripcion
+            </td>
+            
+            <td>
+                    @multipropietario.AnoInscripcion
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.AnoInscripcion)
+                    @multipropietario.NumeroInscripcion
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.NumeroInscripcion)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.RunRut)
+                    @multipropietario.RunRut
             </td>
 
             <td>
-                    @Html.DisplayFor(modelItem => item.PorcentajeDerecho) %
+                    @multipropietario.PorcentajeDerecho %
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.AnoVigenciaInicial) 
+                    @multipropietario.AnoVigenciaInicial
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.AnoVigenciaFinal)
+                    @multipropietario.AnoVigenciaFinal
             </td>
         </tr>
 }
