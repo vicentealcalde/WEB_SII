@@ -189,6 +189,7 @@ namespace aplicacion.Controllers
             }
             restaPorcentaje = 100 - sumaPorcentajeDerecho;
             double promedioPorcentajeDerecho = restaPorcentaje / AdquirienteRun.Length;
+
             for (int i = 0; i < AdquirienteRun.Length; i++)
             {
                 DateTime preYear;
@@ -196,10 +197,23 @@ namespace aplicacion.Controllers
                 if (escrituraViewModel.Escritura.FechaInscripcion.Year < 2019)
                 {
                     preYear = new DateTime(2019,
-                        escrituraViewModel.Escritura.FechaInscripcion.Month, 
+                        escrituraViewModel.Escritura.FechaInscripcion.Month,
                         escrituraViewModel.Escritura.FechaInscripcion.Day);
                 }
-
+                var MultipropietarioEqualYear =  multipropietarios
+                    .Where(a => a.Comuna == escrituraViewModel.Escritura.Comuna)
+                    .Where(b => b.Manzana == int.Parse(escrituraViewModel.Escritura.Manzana))
+                    .Where(c => c.Predio == int.Parse(escrituraViewModel.Escritura.Predio))
+                    .Where(d => d.AnoVigenciaInicial == int.Parse(preYear.Year.ToString()))
+                    .Where(e => e.RunRut == AdquirienteRun[i])
+                    .ToList();
+                if(MultipropietarioEqualYear.Count > 0)
+                {
+                    foreach (var EqualYear in MultipropietarioEqualYear)
+                    {
+                        _context.Remove(EqualYear);
+                    }
+                }
                 var multipropietario = new Multipropietario
                 {
                     Comuna = escrituraViewModel.Escritura.Comuna,
@@ -224,8 +238,6 @@ namespace aplicacion.Controllers
             _context.Escrituras.Add(escritura);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-            
-            //return View(escrituraViewModel);
         }
         // POST: Escrituras/CreateMultiple
         [HttpPost]
