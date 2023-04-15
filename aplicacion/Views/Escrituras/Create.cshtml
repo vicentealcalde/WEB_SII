@@ -226,8 +226,9 @@
                        
                         // Si la opción seleccionada es "regularizacion", oculta el div
                         $('#Enajenantes').hide();
-                    } else {
-                        // De lo contrario, muestra el div
+                    }
+                    if ($(this).val() === 'compraventa')
+                    {
                         $('#Enajenantes').show();
                     }
                 });
@@ -235,7 +236,7 @@
             $(document).ready(function () {
                 $('form').submit(function () {
                     if ('input[name="Adquirente.RunRut"]'.length === 0) {
-                        alert('Debe existir minimo un Enajenante');
+                        alert('Debe existir minimo un adquiriente');
                         return false; // Evita el envío del formulario
 
                     }
@@ -393,7 +394,7 @@
             var row = cb.parentNode.parentNode;
             var porcentajeInput = row.cells[1].querySelector('input[type="text"]');
             if (cb.checked) {
-                porcentajeInput.value = '0';
+                porcentajeInput.value = 0;
                 porcentajeInput.disabled = true;
             } else {
                 porcentajeInput.value = '';

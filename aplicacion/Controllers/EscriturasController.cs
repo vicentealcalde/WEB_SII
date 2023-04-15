@@ -86,12 +86,12 @@ namespace aplicacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EscrituraViewModel escrituraViewModel)
         {
-            
+
             var dbContext = new EscriturasContext();
             var NumAtencion = dbContext.Escrituras.OrderByDescending(e => e.FechaInscripcion).Select(e => e.NumAtencion).FirstOrDefault();
             NumAtencion = NumAtencion + 1;
-            
-            
+
+
             var escritura = new Escritura
             {
                 Cne = escrituraViewModel.Escritura.Cne,
@@ -126,33 +126,35 @@ namespace aplicacion.Controllers
                 }
             }
 
-            
+
             var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
             var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
             var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
-           
             double porcentajeConcedido = 0;
             int cantidad = 0;
             for (int i = 0; i < AdquirienteRun.Length; i++)
             {
-                porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
+                var UpdateList = AdquirentePorcentajeDerecho.ToList();
                 if (bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]) == true)
                 {
-                    cantidad ++;
+                    Console.WriteLine("\nENTRO\n");
+                    UpdateList.Add("0");
+                    cantidad++;
+                }
+                AdquirentePorcentajeDerecho = UpdateList.ToArray();
+                try
+                {
+                    porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
+                }
+                catch
+                {
+                    UpdateList.Add("0");
+                    cantidad++;
+                    AdquirentePorcentajeDerecho = UpdateList.ToArray();
+                    porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
                 }
             }
 
-            if (porcentajeConcedido < 100 && cantidad > 0)
-            {
-                double porcentajeSobrante = (100.0 - porcentajeConcedido) / cantidad;
-                for (int i = 0; i < AdquirienteRun.Length; i++)
-                {
-                    if (bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]) == true)
-                    {
-                        AdquirentePorcentajeDerecho[i] = porcentajeSobrante.ToString();
-                    }
-                }  
-            }
             for (int i = 0; i < AdquirienteRun.Length; i++)
             {
                 var enajenante = new Enajenante
@@ -205,7 +207,7 @@ namespace aplicacion.Controllers
                     .Where(b => b.Manzana == int.Parse(escrituraViewModel.Escritura.Manzana))
                     .Where(c => c.Predio == int.Parse(escrituraViewModel.Escritura.Predio))
                     .Where(d => d.AnoVigenciaInicial == int.Parse(preYear.Year.ToString()))
-                    .Where(e => e.RunRut == AdquirienteRun[i])
+                    .Where(e => e.NumeroInscripcion <= int.Parse(escrituraViewModel.Escritura.NumeroInscripcion))
                     .ToList();
                 if(MultipropietarioEqualYear.Count > 0)
                 {
