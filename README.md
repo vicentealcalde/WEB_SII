@@ -177,3 +177,15 @@ tambien es necesario agregar la siguiente consulta sql al sql server despues de 
     UPDATE MULTIPROPIETARIO
     SET [AnoVigenciaFinal] = 0
     WHERE [AnoVigenciaFinal] IS NULL;
+
+# Consideraciones:
+
+para este punto: 
+El registro se mantiene por año; si hay varios registros para el mismo año prima el más nuevo.
+
+se tendra en consideracion: 
+ * la comuna
+ * la manzana
+ * el predio
+ * año vigencia inicial
+ * rut
