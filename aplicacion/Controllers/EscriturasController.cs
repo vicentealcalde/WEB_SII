@@ -135,9 +135,8 @@ namespace aplicacion.Controllers
             for (int i = 0; i < AdquirienteRun.Length; i++)
             {
                 var UpdateList = AdquirentePorcentajeDerecho.ToList();
-                if (bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]) == true)
+                if (bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]) == true && i < AdquirentePorcentajeDerechoNoAcreditado.Length)
                 {
-                    Console.WriteLine("\nENTRO\n");
                     UpdateList.Add("0");
                     cantidad++;
                 }

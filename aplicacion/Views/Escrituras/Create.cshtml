@@ -213,7 +213,6 @@
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
         <script>
             $(document).ready(function () {
                 // Oculta el div al cargar la página
@@ -345,6 +344,9 @@
             cell2.innerHTML = "NEW CELL2";
         }
 
+        var firstRow = true;
+        var showCheckbox = false;
+
         function addNewRow() {
             var table = document.getElementById("Adquirente");
             var rowCount = table.rows.length;
@@ -357,7 +359,11 @@
                 } else if (i == 1) {
                     cell.innerHTML = '@Html.TextBoxFor(model => model.Adquirente.PorcentajeDerecho, new { @class = "form-control" })';
                 } else if (i == 2) {
-                    cell.innerHTML = '@Html.CheckBoxFor(model => model.Adquirente.PorcentajeDerechoNoAcreditado, new { @class = "form-check-input", onclick = "checkPorcentaje(this)" })';
+                    if (showCheckbox) {
+                        cell.innerHTML = '@Html.CheckBoxFor(model => model.Adquirente.PorcentajeDerechoNoAcreditado, new { @class = "form-check-input", onclick = "checkPorcentaje(this)" })';
+                    } else {
+                        cell.innerHTML = '@Html.CheckBoxFor(model => model.Adquirente.PorcentajeDerechoNoAcreditado)';
+                    }
                 } else {
                     cell.innerHTML = '<button class="btn btn-danger" data-rowid="' + rowCount + '">Delete</button>';
                 }
@@ -366,6 +372,17 @@
             var newDeleteButton = row.querySelector('button[data-rowid="' + rowCount + '"]');
             newDeleteButton.addEventListener('click', function () { deleteRow(tableId, this); });
 
+            // Update the flag for showing the checkbox
+            showCheckbox = true;
+            firstRow = false;
+        }
+
+        function checkPorcentaje(checkbox) {
+            var isChecked = checkbox.checked;
+            // Update the flag for showing the checkbox
+            showCheckbox = !isChecked;
+            // Set the value of the checkbox according to the new state of the flag
+            checkbox.checked = isChecked;
         }
         function addNewRowE() {
             var table = document.getElementById("Enajenante");

@@ -60,7 +60,9 @@
         </dd>
     </dl>
     <div>
-        <h2>Enajenantes Actuales:</h2>
+    @if (Model.Cne == "regularizacion")
+    {
+        <h2>Adquirientes Actuales:</h2>
         <table class="table">
             <tr>
                 <th>
@@ -91,37 +93,74 @@
             }
 
         </table>
-        <h2>Adquirientes Actuales:</h2>
-        <table class="table">
-            <tr>
-                <th>
-                    Run/Rut
-                </th>
-                <th>
-                    % Derecho
-                </th>
-                <th>
-                    Derecho no acreditado
-                </th>
-            </tr>
-
-            @foreach (var adquirienteActual in ViewBag.adquirientesActuales)
-            {
+    }
+    @if (Model.Cne == "compraventa")
+    {
+            <h2>Enajenantes Actuales:</h2>
+            <table class="table">
                 <tr>
-                    <td>
-                        @adquirienteActual.RunRut
-                    </td>
-                    <td>
-                        @adquirienteActual.PorcentajeDerecho
-                    </td>
-                    <td>
-                        @adquirienteActual.PorcentajeDerechoNoAcreditado
-                    </td>
-
+                    <th>
+                        Run/Rut
+                    </th>
+                    <th>
+                        % Derecho
+                    </th>
+                    <th>
+                        Derecho no acreditado
+                    </th>
                 </tr>
-            }
 
-        </table>
+                @foreach (var enajenanteActual in ViewBag.EnajenantesActuales)
+                {
+                    <tr>
+                        <td>
+                            @enajenanteActual.RunRut
+                        </td>
+                        <td>
+                            @enajenanteActual.PorcentajeDerecho
+                        </td>
+                        <td>
+                            @enajenanteActual.PorcentajeDerechoNoAcreditado
+                        </td>
+
+                    </tr>
+                }
+
+            </table>
+            <h2>Adquirientes Actuales:</h2>
+            <table class="table">
+                <tr>
+                    <th>
+                        Run/Rut
+                    </th>
+                    <th>
+                        % Derecho
+                    </th>
+                    <th>
+                        Derecho no acreditado
+                    </th>
+                </tr>
+
+                @foreach (var adquirienteActual in ViewBag.adquirientesActuales)
+                {
+                    <tr>
+                        <td>
+                            @adquirienteActual.RunRut
+                        </td>
+                        <td>
+                            @adquirienteActual.PorcentajeDerecho
+                        </td>
+                        <td>
+                            @adquirienteActual.PorcentajeDerechoNoAcreditado
+                        </td>
+
+                    </tr>
+                }
+
+            </table>
+    }
+   
+
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.NumAtencion">Edit</a> |
