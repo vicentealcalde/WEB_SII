@@ -10,15 +10,18 @@
 <form asp-controller="Multipropietarios" asp-action="Index" method="get">
     <div class="grid-container">
         <div class="section1">Comuna</div>
-        <select name="SearchString">
+        <select name="searchString">
             <option value="">--Seleccione una comuna--</option>
             @foreach (var comuna in Model.Comunas.OrderBy(c => c))
             {
                 <option value="@comuna">@comuna</option>
             }
         </select>
-        <div class="section1">Rol </div>   <input type="number" /> <input type="number" />
-        <div class="section1">Año </div> 
+        <div class="section1">Manzana: </div>   
+        <input type="number" name="searchManzana" />
+        <div class="section1">Predio: </div>
+        <input type="number" name="searchPredio" />
+        <div class="section1">Año: </div> 
         <select id="searchDate" name="searchDate">
             <option value=0></option>
             <option value=2019>2019</option>
@@ -68,44 +71,54 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var multipropietario in @Model.Multipropietarios
+        @{
+            bool infoMostrada = false;
+        }
+        @foreach (var multipropietario in Model.Multipropietarios
             .OrderByDescending(m => m.AnoInscripcion)
             .ThenBy(f => f.NumeroInscripcion))
         {
-        <tr>            
-            <td>
+            infoMostrada = true;
+            <tr>            
+                <td>
                     @multipropietario.Comuna
-            </td>
-            <td>
+                </td>
+                <td>
                     @multipropietario.Manzana
-            </td>
-            <td>
+                </td>
+                <td>
                     @multipropietario.Predio
-            </td>
-            <td>
+                </td>
+                <td>
                     @multipropietario.FechaInscripcion
-            </td>
-            
-            <td>
-                    @multipropietario.AnoInscripcion
-            </td>
-            <td>
-                    @multipropietario.NumeroInscripcion
-            </td>
-            <td>
-                    @multipropietario.RunRut
-            </td>
+                </td>
 
-            <td>
+                <td>
+                    @multipropietario.AnoInscripcion
+                </td>
+                <td>
+                    @multipropietario.NumeroInscripcion
+                </td>
+                <td>
+                    @multipropietario.RunRut
+                </td>
+
+                <td>
                     @multipropietario.PorcentajeDerecho %
-            </td>
-            <td>
+                </td>
+                <td>
                     @multipropietario.AnoVigenciaInicial
-            </td>
-            <td>
+                </td>
+                <td>
                     @multipropietario.AnoVigenciaFinal
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
+        @if (!infoMostrada)
+        {
+            <tr>
+                <td colspan="11">No hay información para los parámetros especificados.</td>
+            </tr>
+        }
     </tbody>
 </table>

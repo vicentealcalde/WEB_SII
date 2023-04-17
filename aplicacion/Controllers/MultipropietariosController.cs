@@ -21,7 +21,7 @@ namespace aplicacion.Controllers
         }
 
         // GET: Multipropietarios
-        public async Task<IActionResult> Index(string searchString, int searchDate)
+        public async Task<IActionResult> Index(string searchString, int searchDate, int searchManzana,int searchPredio)
         {
             if (_context.Multipropietarios == null)
             {
@@ -34,15 +34,23 @@ namespace aplicacion.Controllers
             {
                 Multi = Multi.Where(s => s.Comuna!.Contains(searchString));
             }
-
+            if (!string.IsNullOrEmpty(searchManzana.ToString()) && searchManzana != 0)
+            {
+                Multi = Multi.Where(s => s.Manzana == searchManzana);
+            }
+            if (!string.IsNullOrEmpty(searchPredio.ToString()) && searchPredio != 0)
+            {
+                Multi = Multi.Where(s => s.Predio == searchPredio);
+            }
             if (!string.IsNullOrEmpty(searchDate.ToString()) && searchDate != 0)
             {
-                if(searchDate >= 2019)
+                if (searchDate >= 2019)
                 {
                     Multi = Multi.Where(s => s.AnoVigenciaInicial <= searchDate && (s.AnoVigenciaFinal >= searchDate || s.AnoVigenciaFinal == 0));
                 }
-               
             }
+
+
             var nombresComunas = new Models.ConstantsAndList();
             var viewModel = new MultipropietarioViewModel
             {
