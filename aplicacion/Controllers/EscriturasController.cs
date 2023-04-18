@@ -71,6 +71,7 @@ namespace aplicacion.Controllers
             var ultimoNumAtencion = dbContext.Escrituras.OrderByDescending(e => e.FechaInscripcion).Select(e => e.NumAtencion).FirstOrDefault();
             ultimoNumAtencion += 1;
             var enan = new Enajenante();
+            var adqu = new Adquirente();
             ViewBag.NumAtencion = ultimoNumAtencion;
             var model = new EscrituraViewModel();
             var nombresComunas = new Models.ConstantsAndList();
@@ -105,138 +106,187 @@ namespace aplicacion.Controllers
 
             if (escritura.Cne == "compraventa")
             {
+                var EnajenanteNumAtencion = (Request.Form["Enajenante.NumAtencion"].ToString()).Split(",");
+                var AdquirienteNumAtencion = (Request.Form["Adquiriente.NumAtencion"].ToString()).Split(",");
                 var EnajenateRun = (Request.Form["Enajenate.RunRut"].ToString()).Split(",");
                 var EnajenantePorcentajeDerecho = (Request.Form["Enajenante.PorcentajeDerecho"].ToString()).Split(",");
-                //List<double> EnajenantePorcentajeDerecho = EPorcentajeDerecho.ConvertAll(x => double.Parse(x));
-                var EnajenanteNumAtencion = (Request.Form["Enajenante.NumAtencion"].ToString()).Split(",");
                 var EnajenantePorcentajeDerechoNoAcreditado = (Request.Form["Enajenante.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
+                var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
+                var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
+                var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
                 for (int i = 0; i < EnajenateRun.Length; i++)
                 {
-                    var adquirente = new Adquirente
+                    try
+                    {
+                        var adquirente = new Adquirente
+                        {
+                            NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                            RunRut = EnajenateRun[i],
+                            PorcentajeDerecho = double.Parse(EnajenantePorcentajeDerecho[i]),
+                            PorcentajeDerechoNoAcreditado = bool.Parse(EnajenantePorcentajeDerechoNoAcreditado[i]),
+                            NumAtencionNavigation = escritura
+                        };
+                        escritura.Adquirentes.Add(adquirente);
+                    }
+                    catch
+                    {
+                        var adquirente = new Adquirente
+                        {
+                            NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                            RunRut = EnajenateRun[i],
+                            PorcentajeDerecho = 0.0,
+                            PorcentajeDerechoNoAcreditado = true,
+                            NumAtencionNavigation = escritura
+                        };
+                        escritura.Adquirentes.Add(adquirente);
+                    }
+              
+                }
+                for (int t = 0; t < AdquirienteRun.Length; t++)
+                {
+                    try
+                    {
+                        var enajenante = new Enajenante
+                        {
+                            NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                            RunRut = AdquirienteRun[t],
+                            PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[t]),
+                            PorcentajeDerechoNoAcreditado = bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[t]),
+                            NumAtencionNavigation = escritura
+                        };
+                        escritura.Enajenantes.Add(enajenante);
+                    }
+                    catch
+                    {
+                        var enajenante = new Enajenante
+                        {
+                            NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                            RunRut = AdquirienteRun[t],
+                            PorcentajeDerecho = 0.0,
+                            PorcentajeDerechoNoAcreditado = true,
+                            NumAtencionNavigation = escritura
+                        };
+                        escritura.Enajenantes.Add(enajenante);
+                    }
+
+                }
+                _context.Escrituras.Add(escritura);
+            }
+
+            if(escritura.Cne == "regularizacion")
+            {
+                var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
+                var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
+                var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
+                double porcentajeConcedido = 0;
+                int cantidad = 0;
+                for (int i = 0; i < AdquirienteRun.Length; i++)
+                {
+                    var UpdateList = AdquirentePorcentajeDerecho.ToList();
+                    if (bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]) == true && i < AdquirentePorcentajeDerechoNoAcreditado.Length)
+                    {
+                        UpdateList.Add("0");
+                        cantidad++;
+                    }
+                    AdquirentePorcentajeDerecho = UpdateList.ToArray();
+                    try
+                    {
+                        porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
+                    }
+                    catch
+                    {
+                        UpdateList.Add("0");
+                        cantidad++;
+                        AdquirentePorcentajeDerecho = UpdateList.ToArray();
+                        porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
+                    }
+                }
+
+                for (int i = 0; i < AdquirienteRun.Length; i++)
+                {
+                    var enajenante = new Enajenante
                     {
                         NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
-                        RunRut = EnajenateRun[i],
-                        PorcentajeDerecho = double.Parse(EnajenantePorcentajeDerecho[i]),
-                        PorcentajeDerechoNoAcreditado = bool.Parse(EnajenantePorcentajeDerechoNoAcreditado[i]),
+                        RunRut = AdquirienteRun[i],
+                        PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]),
+                        PorcentajeDerechoNoAcreditado = bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]),
                         NumAtencionNavigation = escritura
                     };
 
-                    escritura.Adquirentes.Add(adquirente);
+                    escritura.Enajenantes.Add(enajenante);
 
                 }
-            }
 
-
-            var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
-            var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
-            var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
-            double porcentajeConcedido = 0;
-            int cantidad = 0;
-            for (int i = 0; i < AdquirienteRun.Length; i++)
-            {
-                var UpdateList = AdquirentePorcentajeDerecho.ToList();
-                if (bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]) == true && i < AdquirentePorcentajeDerechoNoAcreditado.Length)
+                var multipropietarios = _context.Multipropietarios
+                .Where(m => m.Comuna == escrituraViewModel.Escritura.Comuna && m.Manzana == int.Parse(escrituraViewModel.Escritura.Manzana) && m.Predio == int.Parse(escrituraViewModel.Escritura.Predio))
+                .ToList();
+                foreach (Multipropietario multipropietario in multipropietarios)
                 {
-                    UpdateList.Add("0");
-                    cantidad++;
-                }
-                AdquirentePorcentajeDerecho = UpdateList.ToArray();
-                try
-                {
-                    porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
-                }
-                catch
-                {
-                    UpdateList.Add("0");
-                    cantidad++;
-                    AdquirentePorcentajeDerecho = UpdateList.ToArray();
-                    porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
-                }
-            }
-
-            for (int i = 0; i < AdquirienteRun.Length; i++)
-            {
-                var enajenante = new Enajenante
-                {
-                    NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
-                    RunRut = AdquirienteRun[i],
-                    PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]),
-                    PorcentajeDerechoNoAcreditado = bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]),
-                    NumAtencionNavigation = escritura
-                };
-
-                escritura.Enajenantes.Add(enajenante);
-
-            }
-
-            var multipropietarios = _context.Multipropietarios
-            .Where(m => m.Comuna == escrituraViewModel.Escritura.Comuna && m.Manzana == int.Parse(escrituraViewModel.Escritura.Manzana) && m.Predio == int.Parse(escrituraViewModel.Escritura.Predio))
-            .ToList();
-            foreach (Multipropietario multipropietario in multipropietarios )
-            {
-                if (multipropietario.AnoVigenciaFinal == 0)
-                {
-                    multipropietario.AnoVigenciaFinal = int.Parse(escrituraViewModel.Escritura.FechaInscripcion.Year.ToString());
-                    _context.Update(multipropietario);
-                   
-                }
-
-            }
-            double sumaPorcentajeDerecho = 0.0;
-            double restaPorcentaje = 0.0;
-            for (int i = 0; i < AdquirienteRun.Length; i++)
-            {
-                sumaPorcentajeDerecho += double.Parse(AdquirentePorcentajeDerecho[i]);
-            }
-            restaPorcentaje = 100 - sumaPorcentajeDerecho;
-            double promedioPorcentajeDerecho = restaPorcentaje / AdquirienteRun.Length;
-
-            for (int i = 0; i < AdquirienteRun.Length; i++)
-            {
-                DateTime preYear;
-                preYear = escrituraViewModel.Escritura.FechaInscripcion;
-                if (escrituraViewModel.Escritura.FechaInscripcion.Year < 2019)
-                {
-                    preYear = new DateTime(2019,
-                        escrituraViewModel.Escritura.FechaInscripcion.Month,
-                        escrituraViewModel.Escritura.FechaInscripcion.Day);
-                }
-                var MultipropietarioEqualYear =  multipropietarios
-                    .Where(a => a.Comuna == escrituraViewModel.Escritura.Comuna)
-                    .Where(b => b.Manzana == int.Parse(escrituraViewModel.Escritura.Manzana))
-                    .Where(c => c.Predio == int.Parse(escrituraViewModel.Escritura.Predio))
-                    .Where(d => d.AnoVigenciaInicial == int.Parse(preYear.Year.ToString()))
-                    .Where(e => e.NumeroInscripcion <= int.Parse(escrituraViewModel.Escritura.NumeroInscripcion))
-                    .ToList();
-                if(MultipropietarioEqualYear.Count > 0)
-                {
-                    foreach (var EqualYear in MultipropietarioEqualYear)
+                    if (multipropietario.AnoVigenciaFinal == 0)
                     {
-                        _context.Remove(EqualYear);
+                        multipropietario.AnoVigenciaFinal = int.Parse(escrituraViewModel.Escritura.FechaInscripcion.Year.ToString());
+                        _context.Update(multipropietario);
+
                     }
+
                 }
-                var multipropietario = new Multipropietario
+                double sumaPorcentajeDerecho = 0.0;
+                double restaPorcentaje = 0.0;
+                for (int i = 0; i < AdquirienteRun.Length; i++)
                 {
-                    Comuna = escrituraViewModel.Escritura.Comuna,
-                    Manzana = int.Parse(escrituraViewModel.Escritura.Manzana),
-                    Predio = int.Parse(escrituraViewModel.Escritura.Predio),
-                    Fojas = escrituraViewModel.Escritura.Fojas,
-                    FechaInscripcion = preYear,
-                    NumeroInscripcion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
-                    RunRut = AdquirienteRun[i],
-                    AnoInscripcion = int.Parse(preYear.Year.ToString()),
-                    AnoVigenciaInicial = int.Parse(preYear.Year.ToString()),
-                    AnoVigenciaFinal = 0,
-                    PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]) + promedioPorcentajeDerecho
+                    sumaPorcentajeDerecho += double.Parse(AdquirentePorcentajeDerecho[i]);
+                }
+                restaPorcentaje = 100 - sumaPorcentajeDerecho;
+                double promedioPorcentajeDerecho = restaPorcentaje / AdquirienteRun.Length;
 
-                };
+                for (int i = 0; i < AdquirienteRun.Length; i++)
+                {
+                    DateTime preYear;
+                    preYear = escrituraViewModel.Escritura.FechaInscripcion;
+                    if (escrituraViewModel.Escritura.FechaInscripcion.Year < 2019)
+                    {
+                        preYear = new DateTime(2019,
+                            escrituraViewModel.Escritura.FechaInscripcion.Month,
+                            escrituraViewModel.Escritura.FechaInscripcion.Day);
+                    }
+                    var MultipropietarioEqualYear = multipropietarios
+                        .Where(a => a.Comuna == escrituraViewModel.Escritura.Comuna)
+                        .Where(b => b.Manzana == int.Parse(escrituraViewModel.Escritura.Manzana))
+                        .Where(c => c.Predio == int.Parse(escrituraViewModel.Escritura.Predio))
+                        .Where(d => d.AnoVigenciaInicial == int.Parse(preYear.Year.ToString()))
+                        .Where(e => e.NumeroInscripcion <= int.Parse(escrituraViewModel.Escritura.NumeroInscripcion))
+                        .ToList();
+                    if (MultipropietarioEqualYear.Count > 0)
+                    {
+                        foreach (var EqualYear in MultipropietarioEqualYear)
+                        {
+                            Console.WriteLine(EqualYear);
+                            _context.Remove(EqualYear);
+                        }
+                    }
+                    var multipropietario = new Multipropietario
+                    {
+                        Comuna = escrituraViewModel.Escritura.Comuna,
+                        Manzana = int.Parse(escrituraViewModel.Escritura.Manzana),
+                        Predio = int.Parse(escrituraViewModel.Escritura.Predio),
+                        Fojas = escrituraViewModel.Escritura.Fojas,
+                        FechaInscripcion = preYear,
+                        NumeroInscripcion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                        RunRut = AdquirienteRun[i],
+                        AnoInscripcion = int.Parse(preYear.Year.ToString()),
+                        AnoVigenciaInicial = int.Parse(preYear.Year.ToString()),
+                        AnoVigenciaFinal = 0,
+                        PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]) + promedioPorcentajeDerecho
 
-                _context.Add(multipropietario);
+                    };
 
+                    _context.Add(multipropietario);
+
+                }
+
+                _context.Escrituras.Add(escritura);
             }
-            
-            
-            _context.Escrituras.Add(escritura);
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
