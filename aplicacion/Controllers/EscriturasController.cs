@@ -128,7 +128,7 @@ namespace aplicacion.Controllers
                         };
                         escritura.Adquirentes.Add(adquirente);
                     }
-                    catch
+                    catch (Exception)
                     {
                         var adquirente = new Adquirente
                         {
@@ -140,7 +140,6 @@ namespace aplicacion.Controllers
                         };
                         escritura.Adquirentes.Add(adquirente);
                     }
-              
                 }
                 for (int t = 0; t < AdquirienteRun.Length; t++)
                 {
@@ -156,7 +155,7 @@ namespace aplicacion.Controllers
                         };
                         escritura.Enajenantes.Add(enajenante);
                     }
-                    catch
+                    catch (Exception)
                     {
                         var enajenante = new Enajenante
                         {
@@ -171,33 +170,38 @@ namespace aplicacion.Controllers
 
                 }
                 _context.Escrituras.Add(escritura);
+
             }
 
-            if(escritura.Cne == "regularizacion")
+            if (escritura.Cne == "regularizacion")
             {
                 var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
                 var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
                 var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
                 double porcentajeConcedido = 0;
                 int cantidad = 0;
+
                 for (int i = 0; i < AdquirienteRun.Length; i++)
                 {
-                    var UpdateList = AdquirentePorcentajeDerecho.ToList();
-                    if (bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]) == true && i < AdquirentePorcentajeDerechoNoAcreditado.Length)
+                    var updateList = AdquirentePorcentajeDerecho.ToList();
+
+                    if (bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]) && i < AdquirentePorcentajeDerechoNoAcreditado.Length)
                     {
-                        UpdateList.Add("0");
+                        updateList.Add("0");
                         cantidad++;
                     }
-                    AdquirentePorcentajeDerecho = UpdateList.ToArray();
+
+                    AdquirentePorcentajeDerecho = updateList.ToArray();
+
                     try
                     {
                         porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
                     }
                     catch
                     {
-                        UpdateList.Add("0");
+                        updateList.Add("0");
                         cantidad++;
-                        AdquirentePorcentajeDerecho = UpdateList.ToArray();
+                        AdquirentePorcentajeDerecho = updateList.ToArray();
                         porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
                     }
                 }
@@ -214,24 +218,27 @@ namespace aplicacion.Controllers
                     };
 
                     escritura.Enajenantes.Add(enajenante);
-
                 }
 
                 var multipropietarios = _context.Multipropietarios
-                .Where(m => m.Comuna == escrituraViewModel.Escritura.Comuna && m.Manzana == int.Parse(escrituraViewModel.Escritura.Manzana) && m.Predio == int.Parse(escrituraViewModel.Escritura.Predio))
-                .ToList();
-                foreach (Multipropietario multipropietario in multipropietarios)
+                    .Where(m => m.Comuna == escrituraViewModel.Escritura.Comuna &&
+                                m.Manzana == int.Parse(escrituraViewModel.Escritura.Manzana) &&
+                                m.Predio == int.Parse(escrituraViewModel.Escritura.Predio))
+                    .ToList();
+
+                foreach (var multipropietario in multipropietarios)
                 {
                     if (multipropietario.AnoVigenciaFinal == 0)
                     {
-                        multipropietario.AnoVigenciaFinal = int.Parse(escrituraViewModel.Escritura.FechaInscripcion.Year.ToString());
+                        multipropietario.AnoVigenciaFinal = escrituraViewModel.Escritura.FechaInscripcion.Year;
                         _context.Update(multipropietario);
-
                     }
-
                 }
+
+
                 double sumaPorcentajeDerecho = 0.0;
                 double restaPorcentaje = 0.0;
+
                 for (int i = 0; i < AdquirienteRun.Length; i++)
                 {
                     sumaPorcentajeDerecho += double.Parse(AdquirentePorcentajeDerecho[i]);
@@ -241,29 +248,29 @@ namespace aplicacion.Controllers
 
                 for (int i = 0; i < AdquirienteRun.Length; i++)
                 {
-                    DateTime preYear;
-                    preYear = escrituraViewModel.Escritura.FechaInscripcion;
+                    DateTime preYear = escrituraViewModel.Escritura.FechaInscripcion;
+
                     if (escrituraViewModel.Escritura.FechaInscripcion.Year < 2019)
                     {
-                        preYear = new DateTime(2019,
-                            escrituraViewModel.Escritura.FechaInscripcion.Month,
-                            escrituraViewModel.Escritura.FechaInscripcion.Day);
+                        preYear = new DateTime(2019, escrituraViewModel.Escritura.FechaInscripcion.Month, escrituraViewModel.Escritura.FechaInscripcion.Day);
                     }
-                    var MultipropietarioEqualYear = multipropietarios
+
+                    var multipropietarioEqualYear = multipropietarios
                         .Where(a => a.Comuna == escrituraViewModel.Escritura.Comuna)
                         .Where(b => b.Manzana == int.Parse(escrituraViewModel.Escritura.Manzana))
                         .Where(c => c.Predio == int.Parse(escrituraViewModel.Escritura.Predio))
                         .Where(d => d.AnoVigenciaInicial == int.Parse(preYear.Year.ToString()))
                         .Where(e => e.NumeroInscripcion <= int.Parse(escrituraViewModel.Escritura.NumeroInscripcion))
                         .ToList();
-                    if (MultipropietarioEqualYear.Count > 0)
+
+                    if (multipropietarioEqualYear.Count > 0)
                     {
-                        foreach (var EqualYear in MultipropietarioEqualYear)
+                        foreach (var equalYear in multipropietarioEqualYear)
                         {
-                            Console.WriteLine(EqualYear);
-                            _context.Remove(EqualYear);
+                            _context.Remove(equalYear);
                         }
                     }
+
                     var multipropietario = new Multipropietario
                     {
                         Comuna = escrituraViewModel.Escritura.Comuna,
@@ -277,17 +284,17 @@ namespace aplicacion.Controllers
                         AnoVigenciaInicial = int.Parse(preYear.Year.ToString()),
                         AnoVigenciaFinal = 0,
                         PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]) + promedioPorcentajeDerecho
-
                     };
 
                     _context.Add(multipropietario);
-
                 }
+
 
                 _context.Escrituras.Add(escritura);
             }
 
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
         // POST: Escrituras/CreateMultiple

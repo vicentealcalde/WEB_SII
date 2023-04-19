@@ -21,35 +21,35 @@ namespace aplicacion.Controllers
         }
 
         // GET: Multipropietarios
-        public async Task<IActionResult> Index(string searchString, int searchDate, int searchManzana,int searchPredio)
+        public async Task<IActionResult> Index(string searchString, int searchDate, int searchManzana, int searchPredio)
         {
-            if (_context.Multipropietarios == null)
+            if (_context.Multipropietarios is null)
             {
-                return Problem("Entity set 'EscriturasContext.Multipropietarios'  is null.");
+                return Problem("Entity set 'EscriturasContext.Multipropietarios' is null.");
             }
 
             var Multi = from m in _context.Multipropietarios
-                         select m;
+                        select m;
+
             if (!string.IsNullOrEmpty(searchString))
             {
                 Multi = Multi.Where(s => s.Comuna!.Contains(searchString));
             }
-            if (!string.IsNullOrEmpty(searchManzana.ToString()) && searchManzana != 0)
+
+            if (searchManzana != 0)
             {
                 Multi = Multi.Where(s => s.Manzana == searchManzana);
             }
-            if (!string.IsNullOrEmpty(searchPredio.ToString()) && searchPredio != 0)
+
+            if (searchPredio != 0)
             {
                 Multi = Multi.Where(s => s.Predio == searchPredio);
             }
-            if (!string.IsNullOrEmpty(searchDate.ToString()) && searchDate != 0)
-            {
-                if (searchDate >= 2019)
-                {
-                    Multi = Multi.Where(s => s.AnoVigenciaInicial <= searchDate && (s.AnoVigenciaFinal >= searchDate || s.AnoVigenciaFinal == 0));
-                }
-            }
 
+            if (searchDate != 0 && searchDate >= 2019)
+            {
+                Multi = Multi.Where(s => s.AnoVigenciaInicial <= searchDate && (s.AnoVigenciaFinal >= searchDate || s.AnoVigenciaFinal == 0));
+            }
 
             var nombresComunas = new Models.ConstantsAndList();
             var viewModel = new MultipropietarioViewModel
@@ -60,6 +60,7 @@ namespace aplicacion.Controllers
 
             return View(viewModel);
         }
+
 
         // GET: Multipropietarios/Details/5
         public async Task<IActionResult> Details(int? id)
