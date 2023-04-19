@@ -127,7 +127,7 @@ luego se le debe añadir lo la siguiente base de datos :
         ('Concepción', 2, 3, '55555555-5', 25.0, 2, 2023, 5678, '2023-01-01', 2023, 2033)
     GO
 # Cosas que se deben cambiar (dentro del codigo) para que funcione
-En appsettings.json, linea 10 y en EscriturasContext.cs en la línea 26
+En appsettings.json, linea 10 y en EscriturasContext.cs en la línea 31
 
 se debe cambiar el
     
@@ -180,12 +180,29 @@ tambien es necesario agregar la siguiente consulta sql al sql server despues de 
 
 # Consideraciones:
 
-para este punto: 
-El registro se mantiene por año; si hay varios registros para el mismo año prima el más nuevo.
+    para este punto: 
+        El registro se mantiene por año; si hay varios registros para el mismo año prima el más nuevo.
 
-se tendra en consideracion: 
- * la comuna
- * la manzana
- * el predio
- * año vigencia inicial
- * rut
+        se tendra en consideracion: 
+        * la comuna
+        * la manzana
+        * el predio
+        * año vigencia inicial
+        * y el numero de ingreso mas alto
+
+ # Error por pull request
+ si es que al hacer el pull request aparece un error, esto es debido a que se cambia los archivos bin, obj y otro al ejecutar la app. 
+
+ se recomienda descargar de nuevo con git clone y probarlo otra vez y volver a actualizar los archivos en:
+ 
+ appsettings.json, linea 10 y en EscriturasContext.cs en la línea 31
+
+se debe cambiar el
+    
+    server=.\\SQLEXPRESS
+
+por
+
+    server={nombre_del_servidor_en_sql_server}\\SQLEXPRESS
+
+para que vuelva a funcionar correctamente.
