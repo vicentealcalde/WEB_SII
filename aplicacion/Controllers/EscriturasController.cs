@@ -64,6 +64,18 @@ namespace aplicacion.Controllers
             return View(escritura);
         }
 
+
+        public bool ValidarMultipropietarios(List<string> ruts)
+        {
+            foreach (string rut in ruts)
+            {
+                if (!_context.Multipropietarios.Any(mp => mp.RunRut == rut))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
         // GET: Escrituras/Create
         public IActionResult Create()
         {
