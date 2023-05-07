@@ -33,6 +33,15 @@ namespace aplicacion.Controllers
             return restaPorcentaje;
         }
 
+        public void ActualizarAnoVigenciaFinal(List<Multipropietario> multipropietarios, int nuevoAnoVigenciaFinal)
+        {
+            foreach (var multipropietario in multipropietarios)
+            {
+                multipropietario.AnoVigenciaFinal = nuevoAnoVigenciaFinal;
+            }
+
+            _context.SaveChanges();
+        }
         public List<Multipropietario> ObtenerMultipropietarios(List<string> ruts)
         {
             List<Multipropietario> multipropietarios = new List<Multipropietario>();
