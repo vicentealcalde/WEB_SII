@@ -33,6 +33,21 @@ namespace aplicacion.Controllers
             return restaPorcentaje;
         }
 
+        public List<Multipropietario> ObtenerMultipropietarios(List<string> ruts)
+        {
+            List<Multipropietario> multipropietarios = new List<Multipropietario>();
+            
+            foreach (string rut in ruts)
+            {
+                Multipropietario multipropietario = _context.Multipropietarios.Where(mp => mp.RunRut == rut).OrderByDescending(mp => mp.AnoVigenciaInicial).FirstOrDefault();
+                if (multipropietario != null)
+                {
+                    multipropietarios.Add(multipropietario);
+                }
+            }
+            
+            return multipropietarios;
+        }
         public List<string> ProcesarPorcentajes(List<string> porcentajes)
         {
             // Convertir los porcentajes a números decimales
@@ -180,10 +195,15 @@ namespace aplicacion.Controllers
                 if (IsValidEnajenantes == false){
                     return Create();
                 }
-
+                AdquirentePorcentajeDerecho = ProcesarPorcentajes(AdquirentePorcentajeDerecho.ToList()).ToArray();
                 var DifSumPercentAdquiriente = DIfSumPercent(AdquirentePorcentajeDerecho.ToList());
                 var DifSumPercentEnajenate = DIfSumPercent(EnajenantePorcentajeDerecho.ToList());
+                
+                if (DifSumPercentAdquiriente == 0)
+                {
 
+
+                }
 
 
 
