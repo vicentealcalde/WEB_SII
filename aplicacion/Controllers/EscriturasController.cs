@@ -21,6 +21,53 @@ namespace aplicacion.Controllers
         private EscriturasContext db = new EscriturasContext();
         private readonly EscriturasContext _context;
 
+        public double DIfSumPercent(List<string> porcentaje){
+            double sumaPorcentajeDerecho = 0.0;
+            double restaPorcentaje = 0.0;
+
+            for (int i = 0; i < porcentaje.Count; i++)
+            {
+                sumaPorcentajeDerecho += double.Parse(porcentaje[i]);
+            }
+            restaPorcentaje = 100 - sumaPorcentajeDerecho;
+            return restaPorcentaje;
+        }
+
+        public List<string> ProcesarPorcentajes(List<string> porcentajes)
+        {
+            // Convertir los porcentajes a números decimales
+            List<decimal> porcentajesDecimales = porcentajes.Select(p => decimal.Parse(p)).ToList();
+            
+            // Calcular la suma de los porcentajes
+            decimal sumaPorcentajes = porcentajesDecimales.Sum();
+            
+            // Calcular la cantidad de porcentajes que son cero
+            int cantidadCeros = porcentajesDecimales.Count(p => p == 0);
+            
+            // Calcular la diferencia entre la suma de los porcentajes y 100
+            decimal diferencia = 100 - sumaPorcentajes;
+            
+            // Si la diferencia es mayor a cero y hay porcentajes iguales a cero, reemplazar los ceros
+            if (diferencia > 0 && cantidadCeros > 0)
+            {
+                // Calcular la cantidad a distribuir entre los porcentajes iguales a cero
+                decimal cantidadDistribuir = diferencia / cantidadCeros;
+                
+                // Reemplazar los ceros con la cantidad a distribuir
+                for (int i = 0; i < porcentajesDecimales.Count; i++)
+                {
+                    if (porcentajesDecimales[i] == 0)
+                    {
+                        porcentajesDecimales[i] = cantidadDistribuir;
+                    }
+                }
+            }
+            
+            // Convertir los porcentajes de vuelta a string y retornarlos en una lista
+            List<string> porcentajesActualizados = porcentajesDecimales.Select(p => p.ToString()).ToList();
+            return porcentajesActualizados;
+        }
+
         public EscriturasController(EscriturasContext context)
         {
             _context = context;
@@ -33,6 +80,8 @@ namespace aplicacion.Controllers
                           View(await _context.Escrituras.ToListAsync()) :
                           Problem("Entity set 'EscriturasContext.Escrituras'  is null.");
         }
+
+
 
         // GET: Escrituras/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -126,62 +175,17 @@ namespace aplicacion.Controllers
                 var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
                 var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
                 var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
-                for (int i = 0; i < EnajenateRun.Length; i++)
-                {
-                    try
-                    {
-                        var adquirente = new Adquirente
-                        {
-                            NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
-                            RunRut = EnajenateRun[i],
-                            PorcentajeDerecho = double.Parse(EnajenantePorcentajeDerecho[i]),
-                            PorcentajeDerechoNoAcreditado = bool.Parse(EnajenantePorcentajeDerechoNoAcreditado[i]),
-                            NumAtencionNavigation = escritura
-                        };
-                        escritura.Adquirentes.Add(adquirente);
-                    }
-                    catch (Exception)
-                    {
-                        var adquirente = new Adquirente
-                        {
-                            NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
-                            RunRut = EnajenateRun[i],
-                            PorcentajeDerecho = 0.0,
-                            PorcentajeDerechoNoAcreditado = true,
-                            NumAtencionNavigation = escritura
-                        };
-                        escritura.Adquirentes.Add(adquirente);
-                    }
-                }
-                for (int t = 0; t < AdquirienteRun.Length; t++)
-                {
-                    try
-                    {
-                        var enajenante = new Enajenante
-                        {
-                            NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
-                            RunRut = AdquirienteRun[t],
-                            PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[t]),
-                            PorcentajeDerechoNoAcreditado = bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[t]),
-                            NumAtencionNavigation = escritura
-                        };
-                        escritura.Enajenantes.Add(enajenante);
-                    }
-                    catch (Exception)
-                    {
-                        var enajenante = new Enajenante
-                        {
-                            NumAtencion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
-                            RunRut = AdquirienteRun[t],
-                            PorcentajeDerecho = 0.0,
-                            PorcentajeDerechoNoAcreditado = true,
-                            NumAtencionNavigation = escritura
-                        };
-                        escritura.Enajenantes.Add(enajenante);
-                    }
+                var IsValidEnajenantes = ValidarMultipropietarios(EnajenateRun.ToList());
 
+                if (IsValidEnajenantes == false){
+                    return Create();
                 }
-                _context.Escrituras.Add(escritura);
+
+                var DifSumPercentAdquiriente = DIfSumPercent(AdquirentePorcentajeDerecho.ToList());
+                var DifSumPercentEnajenate = DIfSumPercent(EnajenantePorcentajeDerecho.ToList());
+
+
+
 
             }
 
