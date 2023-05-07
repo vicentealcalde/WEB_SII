@@ -44,18 +44,11 @@ namespace aplicacion.Controllers
         }
         public List<Multipropietario> ObtenerMultipropietarios(List<string> ruts)
         {
-            List<Multipropietario> multipropietarios = new List<Multipropietario>();
-            
-            foreach (string rut in ruts)
-            {
-                Multipropietario multipropietario = _context.Multipropietarios.Where(mp => mp.RunRut == rut).OrderByDescending(mp => mp.AnoVigenciaInicial).FirstOrDefault();
-                if (multipropietario != null)
-                {
-                    multipropietarios.Add(multipropietario);
-                }
-            }
-            
-            return multipropietarios;
+            var multipropietariosVigentes = _context.Multipropietarios
+            .Where(mp => ruts.Contains(mp.RunRut) && mp.AnoVigenciaFinal == 0)
+            .ToList();
+
+        return multipropietariosVigentes;
         }
         public List<string> ProcesarPorcentajes(List<string> porcentajes)
         {
@@ -137,19 +130,54 @@ namespace aplicacion.Controllers
             return View(escritura);
         }
 
-
-        public bool ValidarMultipropietarios(List<string> ruts)
+        public List<Multipropietario> ActualizarPorcentajes(List<Multipropietario> multipropietarios, List<string> porcentajes)
         {
-            foreach (string rut in ruts)
+            List<Multipropietario> nuevosMultipropietarios = new List<Multipropietario>();
+            
+            // Verificar que la cantidad de porcentajes coincida con la cantidad de multipropietarios
+            if (multipropietarios.Count != porcentajes.Count)
             {
-                if (!_context.Multipropietarios.Any(mp => mp.RunRut == rut))
-                {
-                    return false;
-                }
+                throw new ArgumentException("La cantidad de porcentajes no coincide con la cantidad de multipropietarios.");
             }
-            return true;
+
+            // Crear nuevos multipropietarios con los mismos datos que los originales, pero con PorcentajeDerecho modificado
+            for (int i = 0; i < multipropietarios.Count; i++)
+            {
+                // Convertir porcentaje a decimal
+                decimal porcentaje = decimal.Parse(porcentajes[i]);
+
+                // Crear nuevo multipropietario con datos del original
+                Multipropietario nuevoMultipropietario = new Multipropietario
+                {
+                    RunRut = multipropietarios[i].RunRut,
+                    PorcentajeDerecho = multipropietarios[i].PorcentajeDerecho - (double)porcentaje,
+                    AnoVigenciaInicial = multipropietarios[i].AnoVigenciaInicial,
+                    AnoVigenciaFinal = 0 // AnoVigenciaFinal se establece en cero
+                };
+
+                // Agregar nuevo multipropietario a la lista
+                nuevosMultipropietarios.Add(nuevoMultipropietario);
+            }
+
+            return nuevosMultipropietarios;
         }
-        // GET: Escrituras/Create
+
+        public bool VerificarPropiedad(List<string> ruts, string comuna, int manzana, int predio)
+        {
+               var mp = _context.Multipropietarios
+            .Where(m => m.Manzana == manzana && m.Predio == predio && m.Comuna == comuna && m.AnoVigenciaFinal == 0)
+            .ToList();
+
+        foreach (string rut in ruts)
+        {
+            if (!mp.Any(m => m.RunRut == rut))
+            {
+                return false;
+            }
+        }
+        return true;
+        }
+                // GET: Escrituras/Create
         public IActionResult Create()
         {
             var dbContext = new EscriturasContext();
@@ -198,8 +226,14 @@ namespace aplicacion.Controllers
                 var EnajenantePorcentajeDerechoNoAcreditado = (Request.Form["Enajenante.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
                 var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
                 var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
+                
                 var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
-                var IsValidEnajenantes = ValidarMultipropietarios(EnajenateRun.ToList());
+                var IsValidEnajenantes = VerificarPropiedad(
+                    EnajenateRun.ToList(),
+                    escrituraViewModel.Escritura.Comuna,
+                    int.Parse(escrituraViewModel.Escritura.Manzana),
+                    int.Parse(escrituraViewModel.Escritura.Predio)
+                    );
 
                 if (IsValidEnajenantes == false){
                     return Create();
