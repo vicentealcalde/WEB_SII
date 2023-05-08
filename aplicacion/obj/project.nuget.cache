@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "HG9ZiH6ZBOQBaLcX7q2dOiAeEOAnXQEjD1/vFUJYZ2z+GQQqgfDDcZVIg2jKK9puNYwSMnLP3zoDqW3wG2di/g==",
+  "dgSpecHash": "J6vY+Gu0lBBBGDdJcIOFUTt/yS0aETIuKUJzsmMw5BZzRca/aZ5bGbfisNR4s4Eyd8B6wF/wGtpWYZDIjyq5vg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\vicen\\source\\repos\\aplicacion\\aplicacion\\aplicacion.csproj",
+  "projectFilePath": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto_sii\\WEB_SII\\aplicacion\\aplicacion.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vicen\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\vicen\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
@@ -185,7 +185,11 @@
     "C:\\Users\\vicen\\.nuget\\packages\\system.threading.timer\\4.3.0\\system.threading.timer.4.3.0.nupkg.sha512",
     "C:\\Users\\vicen\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512",
     "C:\\Users\\vicen\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
-    "C:\\Users\\vicen\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512"
+    "C:\\Users\\vicen\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
+    "C:\\Users\\vicen\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.16\\microsoft.netcore.app.ref.6.0.16.nupkg.sha512",
+    "C:\\Users\\vicen\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.16\\microsoft.windowsdesktop.app.ref.6.0.16.nupkg.sha512",
+    "C:\\Users\\vicen\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.16\\microsoft.aspnetcore.app.ref.6.0.16.nupkg.sha512",
+    "C:\\Users\\vicen\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.16\\microsoft.netcore.app.host.win-x64.6.0.16.nupkg.sha512"
   ],
   "logs": []
 }

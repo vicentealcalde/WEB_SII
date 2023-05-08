@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\vicen\\source\\repos\\aplicacion\\aplicacion\\aplicacion.csproj": {}
+    "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto_sii\\WEB_SII\\aplicacion\\aplicacion.csproj": {}
   },
   "projects": {
-    "C:\\Users\\vicen\\source\\repos\\aplicacion\\aplicacion\\aplicacion.csproj": {
+    "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto_sii\\WEB_SII\\aplicacion\\aplicacion.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vicen\\source\\repos\\aplicacion\\aplicacion\\aplicacion.csproj",
+        "projectUniqueName": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto_sii\\WEB_SII\\aplicacion\\aplicacion.csproj",
         "projectName": "aplicacion",
-        "projectPath": "C:\\Users\\vicen\\source\\repos\\aplicacion\\aplicacion\\aplicacion.csproj",
+        "projectPath": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto_sii\\WEB_SII\\aplicacion\\aplicacion.csproj",
         "packagesPath": "C:\\Users\\vicen\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vicen\\source\\repos\\aplicacion\\aplicacion\\obj\\",
+        "outputPath": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto_sii\\WEB_SII\\aplicacion\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\vicen\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -66,6 +66,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.16, 6.0.16]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[6.0.16, 6.0.16]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.16, 6.0.16]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.16, 6.0.16]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -74,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }
