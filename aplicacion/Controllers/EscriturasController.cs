@@ -49,7 +49,14 @@ namespace aplicacion.Controllers
         {
             foreach (var multipropietario in multipropietarios)
             {
-                multipropietario.AnoVigenciaFinal = nuevoAnoVigenciaFinal;
+                if (multipropietario.AnoVigenciaInicial <= nuevoAnoVigenciaFinal)
+                {
+                    multipropietario.AnoVigenciaFinal = nuevoAnoVigenciaFinal;
+                }
+                else{
+                    multipropietario.AnoVigenciaFinal = multipropietario.AnoVigenciaInicial;
+                }
+                
             }
 
             _context.SaveChanges();
@@ -281,10 +288,28 @@ namespace aplicacion.Controllers
                     ActualizarAnoVigenciaFinal(DataEnajenante, escritura.FechaInscripcion.Year - 1);
                     List<Multipropietario> NewEnajenantes = ActualizarPorcentajes(DataEnajenante,EnajenantePorcentajeDerecho.ToList(),escritura);
 
-                    
 
+                    var Newmultipropietario = new Multipropietario
+                    {
+                        Comuna = escrituraViewModel.Escritura.Comuna,
+                        Manzana = int.Parse(escrituraViewModel.Escritura.Manzana),
+                        Predio = int.Parse(escrituraViewModel.Escritura.Predio),
+                        Fojas = escrituraViewModel.Escritura.Fojas,
+                        FechaInscripcion = escritura.FechaInscripcion,
+                        NumeroInscripcion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                        RunRut = AdquirienteRun[0],
+                        AnoInscripcion = escritura.FechaInscripcion.Year,
+                        AnoVigenciaInicial = escritura.FechaInscripcion.Year,
+                        AnoVigenciaFinal = 0,
+                        PorcentajeDerecho = (
+                            DataEnajenante[0].PorcentajeDerecho*double.Parse(EnajenantePorcentajeDerecho[0])/100)*
+                            double.Parse(AdquirentePorcentajeDerecho[0])/100
+                    };
+                    _context.Add(NewEnajenantes[0]);
+                    _context.Add(Newmultipropietario);
 
                 }
+                else{
                 if (DifSumPercentAdquiriente == 0)  //Los enajenantes pierden el porcentaje de la propiedad este es 1 vs 1
                 {
                     List<Multipropietario> DataEnajenante = ObtenerMultipropietarios(
@@ -294,8 +319,10 @@ namespace aplicacion.Controllers
                         escrituraViewModel.Escritura.Comuna
                         );
                     ActualizarAnoVigenciaFinal(DataEnajenante, escritura.FechaInscripcion.Year - 1);
+                    Console.WriteLine("Empieza a crear adquiriente");
 
-
+                    Console.WriteLine(DataEnajenante[0].PorcentajeDerecho);
+                    Console.WriteLine(AdquirienteRun[0]);
                     //Con esto creo el nuevo adquiriente 
                     var multipropietario = new Multipropietario
                     {
@@ -309,13 +336,15 @@ namespace aplicacion.Controllers
                         AnoInscripcion = escritura.FechaInscripcion.Year,
                         AnoVigenciaInicial = escritura.FechaInscripcion.Year,
                         AnoVigenciaFinal = 0,
-                        PorcentajeDerecho = DataEnajenante[0].PorcentajeDerecho*int.Parse(EnajenantePorcentajeDerecho[0])/100
+                        PorcentajeDerecho = (
+                            DataEnajenante[0].PorcentajeDerecho*double.Parse(EnajenantePorcentajeDerecho[0])/100)*
+                            double.Parse(AdquirentePorcentajeDerecho[0])/100
                     };
 
                     _context.Add(multipropietario);
                         //ActualizarPorcentajes();  
 
-                }
+                }}
 
 
 
