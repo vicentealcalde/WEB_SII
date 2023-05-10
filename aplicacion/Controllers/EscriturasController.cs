@@ -45,6 +45,31 @@ namespace aplicacion.Controllers
             return restaPorcentaje;
         }
 
+        public static List<string> InsertZeros(List<string> PorcentajeDerechoNoAcreditado, List<string> PorcentajeDerecho)
+        {
+            List<string> PorcentajeDerechoModificado = new List<string>();
+            int contador = 0;
+            
+            for (int i = 0; i < PorcentajeDerechoNoAcreditado.Count; i++)
+            {
+                if (PorcentajeDerechoNoAcreditado[i].ToLower() == "true")
+                {
+                    PorcentajeDerechoModificado.Add("0");
+                }
+                else
+                {
+                    if (contador >= PorcentajeDerecho.Count)
+                    {
+                        break;
+                    }
+                    PorcentajeDerechoModificado.Add(PorcentajeDerecho[contador]);
+                    contador++;
+                }
+            }
+            
+            return PorcentajeDerechoModificado;
+        }
+
         public void ActualizarAnoVigenciaFinal(List<Multipropietario> multipropietarios, int nuevoAnoVigenciaFinal)
         {
             foreach (var multipropietario in multipropietarios)
@@ -279,34 +304,66 @@ namespace aplicacion.Controllers
                 var DifSumPercentEnajenate = DIfSumPercent(EnajenantePorcentajeDerecho.ToList());
                 if (EnajenateRun.Count() == 1 &&  AdquirienteRun.Count() == 1 )
                 {
-                    List<Multipropietario> DataEnajenante = ObtenerMultipropietarios(
-                        EnajenateRun.ToList(),
-                        int.Parse(escrituraViewModel.Escritura.Manzana),
-                        int.Parse(escrituraViewModel.Escritura.Predio),
-                        escrituraViewModel.Escritura.Comuna
-                        );
-                    ActualizarAnoVigenciaFinal(DataEnajenante, escritura.FechaInscripcion.Year - 1);
-                    List<Multipropietario> NewEnajenantes = ActualizarPorcentajes(DataEnajenante,EnajenantePorcentajeDerecho.ToList(),escritura);
-
-
-                    var Newmultipropietario = new Multipropietario
+                    if (DifSumPercentAdquiriente != 0 && DifSumPercentAdquiriente != 100)
                     {
-                        Comuna = escrituraViewModel.Escritura.Comuna,
-                        Manzana = int.Parse(escrituraViewModel.Escritura.Manzana),
-                        Predio = int.Parse(escrituraViewModel.Escritura.Predio),
-                        Fojas = escrituraViewModel.Escritura.Fojas,
-                        FechaInscripcion = escritura.FechaInscripcion,
-                        NumeroInscripcion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
-                        RunRut = AdquirienteRun[0],
-                        AnoInscripcion = escritura.FechaInscripcion.Year,
-                        AnoVigenciaInicial = escritura.FechaInscripcion.Year,
-                        AnoVigenciaFinal = 0,
-                        PorcentajeDerecho = (
-                            DataEnajenante[0].PorcentajeDerecho*double.Parse(EnajenantePorcentajeDerecho[0])/100)*
-                            double.Parse(AdquirentePorcentajeDerecho[0])/100
-                    };
-                    _context.Add(NewEnajenantes[0]);
-                    _context.Add(Newmultipropietario);
+                        List<Multipropietario> DataEnajenante = ObtenerMultipropietarios(
+                            EnajenateRun.ToList(),
+                            int.Parse(escrituraViewModel.Escritura.Manzana),
+                            int.Parse(escrituraViewModel.Escritura.Predio),
+                            escrituraViewModel.Escritura.Comuna
+                            );
+                        ActualizarAnoVigenciaFinal(DataEnajenante, escritura.FechaInscripcion.Year - 1);
+                        EnajenantePorcentajeDerecho[0] = EnajenantePorcentajeDerecho[0] + DifSumPercentAdquiriente;
+                        List<Multipropietario> NewEnajenantes = ActualizarPorcentajes(DataEnajenante,EnajenantePorcentajeDerecho.ToList(),escritura);
+
+
+                        var Newmultipropietario = new Multipropietario
+                        {
+                            Comuna = escrituraViewModel.Escritura.Comuna,
+                            Manzana = int.Parse(escrituraViewModel.Escritura.Manzana),
+                            Predio = int.Parse(escrituraViewModel.Escritura.Predio),
+                            Fojas = escrituraViewModel.Escritura.Fojas,
+                            FechaInscripcion = escritura.FechaInscripcion,
+                            NumeroInscripcion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                            RunRut = AdquirienteRun[0],
+                            AnoInscripcion = escritura.FechaInscripcion.Year,
+                            AnoVigenciaInicial = escritura.FechaInscripcion.Year,
+                            AnoVigenciaFinal = 0,
+                            PorcentajeDerecho = (
+                                DataEnajenante[0].PorcentajeDerecho*
+                                double.Parse(AdquirentePorcentajeDerecho[0])/100)
+                        };
+                        _context.Add(NewEnajenantes[0]);
+                        _context.Add(Newmultipropietario);
+                    }
+                    else {
+                        List<Multipropietario> DataEnajenante = ObtenerMultipropietarios(
+                            EnajenateRun.ToList(),
+                            int.Parse(escrituraViewModel.Escritura.Manzana),
+                            int.Parse(escrituraViewModel.Escritura.Predio),
+                            escrituraViewModel.Escritura.Comuna
+                            );
+                        ActualizarAnoVigenciaFinal(DataEnajenante, escritura.FechaInscripcion.Year - 1);
+                        EnajenantePorcentajeDerecho[0] = EnajenantePorcentajeDerecho[0] + DifSumPercentAdquiriente;
+                        var Newmultipropietario = new Multipropietario
+                        {
+                            Comuna = escrituraViewModel.Escritura.Comuna,
+                            Manzana = int.Parse(escrituraViewModel.Escritura.Manzana),
+                            Predio = int.Parse(escrituraViewModel.Escritura.Predio),
+                            Fojas = escrituraViewModel.Escritura.Fojas,
+                            FechaInscripcion = escritura.FechaInscripcion,
+                            NumeroInscripcion = int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                            RunRut = AdquirienteRun[0],
+                            AnoInscripcion = escritura.FechaInscripcion.Year,
+                            AnoVigenciaInicial = escritura.FechaInscripcion.Year,
+                            AnoVigenciaFinal = 0,
+                            PorcentajeDerecho = (
+                                DataEnajenante[0].PorcentajeDerecho*
+                                double.Parse(AdquirentePorcentajeDerecho[0])/100)
+                        };
+                        _context.Add(Newmultipropietario);
+                        
+                    }
 
                 }
                 else{
@@ -355,33 +412,23 @@ namespace aplicacion.Controllers
                 var AdquirienteRun = (Request.Form["Adquirente.RunRut"].ToString()).Split(",");
                 var AdquirentePorcentajeDerecho = (Request.Form["Adquirente.PorcentajeDerecho"].ToString()).Split(",");
                 var AdquirentePorcentajeDerechoNoAcreditado = (Request.Form["Adquirente.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
-                double porcentajeConcedido = 0;
-                int cantidad = 0;
-
-                for (int i = 0; i < AdquirienteRun.Length; i++)
+                
+                AdquirentePorcentajeDerecho = InsertZeros(AdquirentePorcentajeDerechoNoAcreditado.ToList(), AdquirentePorcentajeDerecho.ToList()).ToArray();
+               
+                if (AdquirentePorcentajeDerecho.Length < AdquirienteRun.Length)
                 {
-                    var updateList = AdquirentePorcentajeDerecho.ToList();
-
-                    if (bool.Parse(AdquirentePorcentajeDerechoNoAcreditado[i]) && i < AdquirentePorcentajeDerechoNoAcreditado.Length)
+                    var AdquirentePorcentajeDerechoModificada = AdquirentePorcentajeDerecho.ToList();
+                    var AdquirentePorcentajeDerechoNoAcreditadoModi = AdquirentePorcentajeDerechoNoAcreditado.ToList();
+                    for (int i = 0; i < AdquirienteRun.Length - AdquirentePorcentajeDerecho.Length; i++)
                     {
-                        updateList.Add("0");
-                        cantidad++;
-                    }
 
-                    AdquirentePorcentajeDerecho = updateList.ToArray();
-
-                    try
-                    {
-                        porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
+                        AdquirentePorcentajeDerechoModificada.Add("0");
+                        AdquirentePorcentajeDerechoNoAcreditadoModi.Add("true");
                     }
-                    catch
-                    {
-                        updateList.Add("0");
-                        cantidad++;
-                        AdquirentePorcentajeDerecho = updateList.ToArray();
-                        porcentajeConcedido += double.Parse(AdquirentePorcentajeDerecho[i]);
-                    }
+                    AdquirentePorcentajeDerecho = AdquirentePorcentajeDerechoModificada.ToArray();
+                    AdquirentePorcentajeDerechoNoAcreditado = AdquirentePorcentajeDerechoNoAcreditadoModi.ToArray();
                 }
+                AdquirentePorcentajeDerecho = ProcesarPorcentajes(AdquirentePorcentajeDerecho.ToList()).ToArray();
 
                 for (int i = 0; i < AdquirienteRun.Length; i++)
                 {
@@ -460,7 +507,7 @@ namespace aplicacion.Controllers
                         AnoInscripcion = int.Parse(preYear.Year.ToString()),
                         AnoVigenciaInicial = int.Parse(preYear.Year.ToString()),
                         AnoVigenciaFinal = 0,
-                        PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]) + promedioPorcentajeDerecho
+                        PorcentajeDerecho = double.Parse(AdquirentePorcentajeDerecho[i]) 
                     };
 
                     _context.Add(multipropietario);
