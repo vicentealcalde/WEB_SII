@@ -9,117 +9,117 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = aplicacion
 build_property.RootNamespace = aplicacion
-build_property.ProjectDir = D:\vicen\Documents\2023\1 semestre\verificable\proyecto_sii\WEB_SII\aplicacion\
+build_property.ProjectDir = d:\vicen\Documents\2023\1 semestre\verificable\proyecto_sii\WEB_SII\aplicacion\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\vicen\Documents\2023\1 semestre\verificable\proyecto_sii\WEB_SII\aplicacion
+build_property.MSBuildProjectDirectory = d:\vicen\Documents\2023\1 semestre\verificable\proyecto_sii\WEB_SII\aplicacion
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Adquirentes/Create.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Adquirentes/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRxdWlyZW50ZXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Adquirentes/Delete.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Adquirentes/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRxdWlyZW50ZXNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Adquirentes/Details.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Adquirentes/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRxdWlyZW50ZXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Adquirentes/Edit.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Adquirentes/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRxdWlyZW50ZXNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Adquirentes/Index.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Adquirentes/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRxdWlyZW50ZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Enajenantes/Create.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Enajenantes/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5hamVuYW50ZXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Enajenantes/Delete.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Enajenantes/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5hamVuYW50ZXNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Enajenantes/Details.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Enajenantes/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5hamVuYW50ZXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Enajenantes/Edit.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Enajenantes/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5hamVuYW50ZXNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Enajenantes/Index.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Enajenantes/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5hamVuYW50ZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Escrituras/Create.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Escrituras/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXNjcml0dXJhc1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Escrituras/Delete.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Escrituras/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXNjcml0dXJhc1xEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Escrituras/Details.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Escrituras/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXNjcml0dXJhc1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Escrituras/Edit.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Escrituras/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXNjcml0dXJhc1xFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Escrituras/Index.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Escrituras/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXNjcml0dXJhc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Home/Index.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Home/Privacy.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Multipropietarios/Create.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Multipropietarios/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXVsdGlwcm9waWV0YXJpb3NcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Multipropietarios/Delete.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Multipropietarios/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXVsdGlwcm9waWV0YXJpb3NcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Multipropietarios/Details.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Multipropietarios/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXVsdGlwcm9waWV0YXJpb3NcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Multipropietarios/Edit.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Multipropietarios/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXVsdGlwcm9waWV0YXJpb3NcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Multipropietarios/Index.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Multipropietarios/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXVsdGlwcm9waWV0YXJpb3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Shared/Error.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Shared/_ValidationScriptsPartial.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/_ViewImports.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/_ViewStart.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Shared/_Layout.cshtml]
+[d:/vicen/Documents/2023/1 semestre/verificable/proyecto_sii/WEB_SII/aplicacion/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-si7iom039g
