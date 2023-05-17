@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace aplicacion.Controllers
 {
+
+    
     public class EscriturasController : Controller
     {
         private EscriturasContext db = new EscriturasContext();
@@ -73,6 +75,29 @@ namespace aplicacion.Controllers
             }
 
             _context.SaveChanges();
+        }
+
+        public decimal FindPercentOfPropery(List<Multipropietario> MultiPropertyData)
+        {
+            decimal suma = MultiPropertyData.Sum(mp => (decimal)mp.PorcentajeDerecho);
+            return suma;
+        }
+
+        public void FixPercentOfProperty(int manzana, int predio, string comuna){
+
+            var MultiPropertyData = _context.Multipropietarios
+            .Where(m => m.Manzana == manzana && m.Predio == predio && m.Comuna == comuna && m.AnoVigenciaFinal == 0)
+            .ToList();
+            var TotalPercentProperty = FindPercentOfPropery(MultiPropertyData);
+
+            foreach (Multipropietario multipropietario in MultiPropertyData)
+            {
+                multipropietario.PorcentajeDerecho = multipropietario.PorcentajeDerecho/(double)TotalPercentProperty;
+                _context.Entry(multipropietario).State = EntityState.Modified;
+            }
+
+            _context.SaveChanges();
+
         }
 
         public List<Multipropietario> ObtenerMultipropietarios(List<string> Ruts, int manzana, int predio, string comuna )
@@ -249,8 +274,6 @@ namespace aplicacion.Controllers
             _context.Add(Newmultipropietario);
 
         }
-
-
         public void TotalTransferOfProperty1Vs1(
             string[] EnajenateRun,
             string[] EnajenantePorcentajeDerecho,
@@ -324,6 +347,11 @@ namespace aplicacion.Controllers
 
                 _context.Add(Newmultipropietario);
             }
+
+            FixPercentOfProperty(
+                int.Parse(escrituraViewModel.Escritura.Manzana),
+                int.Parse(escrituraViewModel.Escritura.Predio),
+                escrituraViewModel.Escritura.Comuna);
         }
 
         public void TransferByOwnershipOfProperty(
