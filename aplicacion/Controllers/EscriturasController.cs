@@ -23,42 +23,45 @@ namespace aplicacion.Controllers
         private EscriturasContext db = new EscriturasContext();
         private readonly EscriturasContext _context;
         
-        public double DIfSumPercent(List<string> porcentaje){
-            double sumaPorcentajeDerecho = 0.0;
-            double restaPorcentaje = 0.0;
+        public double CalculateDifferenceFromSumPercent(List<string> percentages)
+        {
+            double sumOfPercentages = 0.0;
+            double differencePercentage = 0.0;
 
-            for (int i = 0; i < porcentaje.Count; i++)
+            for (int i = 0; i < percentages.Count; i++)
             {
-                sumaPorcentajeDerecho += double.Parse(porcentaje[i]);
+                sumOfPercentages += double.Parse(percentages[i]);
             }
-            restaPorcentaje = 100 - sumaPorcentajeDerecho;
-            return restaPorcentaje;
+
+            differencePercentage = 100 - sumOfPercentages;
+            return differencePercentage;
         }
 
-        public static List<string> InsertZeros(List<string> PorcentajeDerechoNoAcreditado, List<string> PorcentajeDerecho)
+        public static List<string> InsertZeros(List<string> uncreditedRightPercentages, List<string> rightPercentages)
         {
-            List<string> PorcentajeDerechoModificado = new List<string>();
-            int contador = 0;
-            
-            for (int i = 0; i < PorcentajeDerechoNoAcreditado.Count; i++)
+            List<string> modifiedRightPercentages = new List<string>();
+            int counter = 0;
+
+            for (int i = 0; i < uncreditedRightPercentages.Count; i++)
             {
-                if (PorcentajeDerechoNoAcreditado[i].ToLower() == "true")
+                if (uncreditedRightPercentages[i].ToLower() == "true")
                 {
-                    PorcentajeDerechoModificado.Add("0");
+                    modifiedRightPercentages.Add("0");
                 }
                 else
                 {
-                    if (contador >= PorcentajeDerecho.Count)
+                    if (counter >= rightPercentages.Count)
                     {
                         break;
                     }
-                    PorcentajeDerechoModificado.Add(PorcentajeDerecho[contador]);
-                    contador++;
+                    modifiedRightPercentages.Add(rightPercentages[counter]);
+                    counter++;
                 }
             }
-            
-            return PorcentajeDerechoModificado;
+
+            return modifiedRightPercentages;
         }
+
 
         public void ActualizarAnoVigenciaFinal(List<Multipropietario> multipropietarios, int nuevoAnoVigenciaFinal)
         {
@@ -509,7 +512,7 @@ namespace aplicacion.Controllers
                     AdquirentePorcentajeDerechoNoAcreditado = AdquirentePorcentajeDerechoNoAcreditadoModi.ToArray();
                 }
             AdquirentePorcentajeDerecho = ProcesarPorcentajes(AdquirentePorcentajeDerecho.ToList()).ToArray();
-            var DifSumPercentAdquiriente = DIfSumPercent(AdquirentePorcentajeDerecho.ToList());
+            var CalculateDifferenceFromSumPercentAdquiriente = CalculateDifferenceFromSumPercent(AdquirentePorcentajeDerecho.ToList());
             if (escritura.Cne == "compraventa")
             {
                 var EnajenanteNumAtencion = (Request.Form["Enajenante.NumAtencion"].ToString()).Split(",");
@@ -525,10 +528,10 @@ namespace aplicacion.Controllers
                 if (IsValidEnajenantes == false){
                     return Create();
                 }
-                var DifSumPercentEnajenate = DIfSumPercent(EnajenantePorcentajeDerecho.ToList());
+                var CalculateDifferenceFromSumPercentEnajenate = CalculateDifferenceFromSumPercent(EnajenantePorcentajeDerecho.ToList());
                 if (EnajenateRun.Count() == 1 &&  AdquirienteRun.Count() == 1 )
                 {
-                    if (DifSumPercentAdquiriente != 0 && DifSumPercentAdquiriente != 100)
+                    if (CalculateDifferenceFromSumPercentAdquiriente != 0 && CalculateDifferenceFromSumPercentAdquiriente != 100)
                     {
                         PartialTransferOfProperty1Vs1(
                             EnajenateRun,
@@ -552,7 +555,7 @@ namespace aplicacion.Controllers
                 }
                 else
                 {
-                    if (DifSumPercentAdquiriente == 0 || DifSumPercentAdquiriente == 100 )  //Los enajenantes pierden el porcentaje de la propiedad este es 1 vs 1
+                    if (CalculateDifferenceFromSumPercentAdquiriente == 0 || CalculateDifferenceFromSumPercentAdquiriente == 100 )  //Los enajenantes pierden el porcentaje de la propiedad este es 1 vs 1
                     {
                         TotalTransferOfPropertyNVsN(
                             EnajenateRun,
