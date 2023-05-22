@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "J6vY+Gu0lBBBGDdJcIOFUTt/yS0aETIuKUJzsmMw5BZzRca/aZ5bGbfisNR4s4Eyd8B6wF/wGtpWYZDIjyq5vg==",
+  "dgSpecHash": "eXKPahox/w7lKTseL0yDdFouv6m5zwccFnlmSyFIA9drciQqWMk/0aLNu5STzy6teE6aRfy/mO8IKoVMGozdUw==",
   "success": true,
-  "projectFilePath": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto_sii\\WEB_SII\\aplicacion\\aplicacion.csproj",
+  "projectFilePath": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto verificable\\WEB_SII\\aplicacion\\aplicacion.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vicen\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\vicen\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

@@ -94,7 +94,7 @@ namespace aplicacion.Controllers
 
             foreach (Multipropietario multipropietario in MultiPropertyData)
             {
-                multipropietario.PorcentajeDerecho = multipropietario.PorcentajeDerecho/(double)TotalPercentProperty;
+                multipropietario.PorcentajeDerecho = (multipropietario.PorcentajeDerecho/(double)TotalPercentProperty)*100;
                 _context.Entry(multipropietario).State = EntityState.Modified;
             }
 
@@ -652,6 +652,10 @@ namespace aplicacion.Controllers
                     _context.Add(multipropietario);
                 }
                 _context.Escrituras.Add(escritura);
+                FixPercentOfProperty(
+                    int.Parse(escrituraViewModel.Escritura.Manzana),
+                    int.Parse(escrituraViewModel.Escritura.Predio),
+                    escrituraViewModel.Escritura.Comuna);
             }
             await _context.SaveChangesAsync();
 

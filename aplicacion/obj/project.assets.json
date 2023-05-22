@@ -10514,11 +10514,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto_sii\\WEB_SII\\aplicacion\\aplicacion.csproj",
+      "projectUniqueName": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto verificable\\WEB_SII\\aplicacion\\aplicacion.csproj",
       "projectName": "aplicacion",
-      "projectPath": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto_sii\\WEB_SII\\aplicacion\\aplicacion.csproj",
+      "projectPath": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto verificable\\WEB_SII\\aplicacion\\aplicacion.csproj",
       "packagesPath": "C:\\Users\\vicen\\.nuget\\packages\\",
-      "outputPath": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto_sii\\WEB_SII\\aplicacion\\obj\\",
+      "outputPath": "D:\\vicen\\Documents\\2023\\1 semestre\\verificable\\proyecto verificable\\WEB_SII\\aplicacion\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\vicen\\AppData\\Roaming\\NuGet\\NuGet.Config",
