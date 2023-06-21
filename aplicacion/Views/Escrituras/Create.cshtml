@@ -107,8 +107,8 @@
                         </td>
                         <td>
                             <div class="form-group">
-                               
-                                <input asp-for="@Model.Escritura.FechaInscripcion" class="form-control" />
+
+                                <input id="FechaInscripcion" asp-for="@Model.Escritura.FechaInscripcion" class="form-control" />
                                 <span asp-validation-for="@Model.Escritura.FechaInscripcion" class="text-danger"></span>
                             </div>
                         </td>
@@ -448,4 +448,37 @@
 
             
     </script>
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function () {
+                // Obtener el valor del campo RUN
+                var runAdquiriente = $('input[name="Adquirente.RunRut"]').val();
+                var runEnajenante = $('input[name="Enajenante.RunRut"]').val();
+                // Validar el formato del RUN (mantisa-dv)
+                var regex = /^[0-9]+-[0-9kK]{1}$/;
+                if (!regex.test(runAdquiriente)) {
+                    alert('El RUN ingresado en el adquiriente no es válido. Por favor, ingrese un RUN válido en el formato "mantisa-dv".');
+                    return false; // Evitar el envío del formulario
+                }
+                if(!regex.test(runEnajenante)){
+                    alert('El RUN ingresado en el enajante no es válido. Por favor, ingrese un RUN válido en el formato "mantisa-dv".');
+                    return false; // Evitar el envío del formulario
+                }
+
+            });
+        });
+        $(document).ready(function () {
+            $('form').submit(function () {
+                var fechaInscripcion = new Date($('#FechaInscripcion').val());
+                var hoy = new Date();
+
+                if (fechaInscripcion > hoy) {
+                    alert('La fecha de inscripción no puede ser en el futuro');
+                    return false; // Evita el envío del formulario
+                }
+            });
+        });
+
+    </script>
+
 }
