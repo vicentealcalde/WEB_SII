@@ -438,6 +438,14 @@ namespace aplicacion.Controllers
 
             return listMultipropietarios;
         }
+
+        public List<Multipropietario> GetMultiownerByYear(int manzana, int predio, string comuna, int NumeroInscripcion, int AnoInscripcion )
+        {
+            var mp = _context.Multipropietarios
+            .Where(m => m.Manzana == manzana && m.Predio == predio && m.Comuna == comuna && m.NumeroInscripcion == NumeroInscripcion && m.AnoInscripcion == AnoInscripcion)
+            .ToList();
+            return mp;
+        }
         public List<string> ProcessPercentages(List<string> porcentajes)
         {
             // Convertir los porcentajes a números decimales
@@ -574,6 +582,7 @@ namespace aplicacion.Controllers
             var CalculateDifferenceFromSumPercentAdquiriente = CalculateDifferenceFromSumPercent(AdquirentePorcentajeDerecho.ToList());
             if (escritura.Cne == "compraventa")
             {
+                
                 var EnajenanteNumAtencion = (Request.Form["Enajenante.NumAtencion"].ToString()).Split(",");
                 var EnajenateRun = (Request.Form["Enajenante.RunRut"].ToString()).Split(",");
                 var EnajenantePorcentajeDerecho = (Request.Form["Enajenante.PorcentajeDerecho"].ToString()).Split(",");
@@ -584,9 +593,15 @@ namespace aplicacion.Controllers
                     int.Parse(escrituraViewModel.Escritura.Manzana),
                     int.Parse(escrituraViewModel.Escritura.Predio)
                     );
-                if (IsValidEnajenantes == false){
-                    return Create();
-                }
+                var oldmultiowner = GetMultiownerByYear(
+                    int.Parse(escrituraViewModel.Escritura.Manzana),
+                    int.Parse(escrituraViewModel.Escritura.Predio),
+                    escrituraViewModel.Escritura.Comuna, 
+                    int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
+                    escrituraViewModel.Escritura.FechaInscripcion.Year);
+
+                UpdateEndYearEnd(oldmultiowner, escrituraViewModel.Escritura.FechaInscripcion.Year);
+
                 var CalculateDifferenceFromSumPercentEnajenate = CalculateDifferenceFromSumPercent(EnajenantePorcentajeDerecho.ToList());
                 if (EnajenateRun.Count() == 1 &&  AdquirienteRun.Count() == 1 )
                 {
