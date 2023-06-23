@@ -85,11 +85,15 @@ namespace aplicacion.Controllers
             return suma;
         }
 
-        public void FixPercentOfProperty(int manzana, int predio, string comuna){
-
+        public List<Multipropietario> getmulti(int manzana, int predio, string comuna){
             var MultiPropertyData = _context.Multipropietarios
             .Where(m => m.Manzana == manzana && m.Predio == predio && m.Comuna == comuna && m.AnoVigenciaFinal == 0)
             .ToList();
+            return MultiPropertyData ;
+        }
+        public void FixPercentOfProperty(int manzana, int predio, string comuna, List<Multipropietario> MultiPropertyData){
+
+            
             var TotalPercentProperty = FindPercentOfPropery(MultiPropertyData);
 
             foreach (Multipropietario multipropietario in MultiPropertyData)
@@ -102,12 +106,10 @@ namespace aplicacion.Controllers
 
         }
 
-        public List<double> GetPorcentajeDerechoByRuts(int manzana, int predio, string comuna, List<string> ruts)
+
+        public List<double> GetPorcentajeDerechoByRuts(List<Multipropietario> multipropietarios, List<string> ruts)
         {
-            // Obtener los multipropietarios de la propiedad específica
-            var multipropietarios = _context.Multipropietarios
-                .Where(m => m.Manzana == manzana && m.Predio == predio && m.Comuna == comuna && m.AnoVigenciaFinal == 0)
-                .ToList();
+           
 
             // Lista para almacenar los PorcentajeDerecho correspondientes
             List<double> porcentajeDerechoList = new List<double>();
@@ -179,16 +181,20 @@ namespace aplicacion.Controllers
             EscrituraViewModel escrituraViewModel,
             Escritura escritura)
         {
+            var MultiPropertyData = getmulti(
+                int.Parse(escrituraViewModel.Escritura.Manzana),
+                int.Parse(escrituraViewModel.Escritura.Predio),
+                escrituraViewModel.Escritura.Comuna
+            );
             List<Multipropietario> DataEnajenante = GetMultiowner(
                             EnajenateRun.ToList(),
                             int.Parse(escrituraViewModel.Escritura.Manzana),
                             int.Parse(escrituraViewModel.Escritura.Predio),
-                            escrituraViewModel.Escritura.Comuna
+                            escrituraViewModel.Escritura.Comuna,
+                            MultiPropertyData
                             );
             var ActualPercentByOwner = GetPorcentajeDerechoByRuts(
-                int.Parse(escritura.Manzana), 
-                int.Parse(escritura.Predio), 
-                escritura.Comuna, 
+                MultiPropertyData, 
                 AdquirienteRun.ToList());
             UpdateEndYearEnd(DataEnajenante, escritura.FechaInscripcion.Year - 1);
             EnajenantePorcentajeDerecho[0] = (100 - double.Parse(EnajenantePorcentajeDerecho[0])).ToString();
@@ -228,16 +234,25 @@ namespace aplicacion.Controllers
             EscrituraViewModel escrituraViewModel,
             Escritura escritura)
         {
+            var MultiPropertyData = getmulti(
+                int.Parse(escrituraViewModel.Escritura.Manzana),
+                int.Parse(escrituraViewModel.Escritura.Predio),
+                escrituraViewModel.Escritura.Comuna
+            );
             List<Multipropietario> DataEnajenante = GetMultiowner(
                             EnajenateRun.ToList(),
                             int.Parse(escrituraViewModel.Escritura.Manzana),
                             int.Parse(escrituraViewModel.Escritura.Predio),
-                            escrituraViewModel.Escritura.Comuna
+                            escrituraViewModel.Escritura.Comuna,
+                            MultiPropertyData
                             );
+            MultiPropertyData = getmulti(
+                int.Parse(escrituraViewModel.Escritura.Manzana),
+                int.Parse(escrituraViewModel.Escritura.Predio),
+                escrituraViewModel.Escritura.Comuna
+            );
             var ActualPercentByOwner = GetPorcentajeDerechoByRuts(
-                int.Parse(escritura.Manzana), 
-                int.Parse(escritura.Predio), 
-                escritura.Comuna, 
+                MultiPropertyData, 
                 AdquirienteRun.ToList());
             UpdateEndYearEnd(DataEnajenante, escritura.FechaInscripcion.Year - 1);
             var Newmultipropietario = new Multipropietario
@@ -269,16 +284,25 @@ namespace aplicacion.Controllers
             Escritura escritura
         )
         {
+            var MultiPropertyData = getmulti(
+                int.Parse(escrituraViewModel.Escritura.Manzana),
+                int.Parse(escrituraViewModel.Escritura.Predio),
+                escrituraViewModel.Escritura.Comuna
+            );
             List<Multipropietario> DataEnajenante = GetMultiowner(
                             EnajenateRun.ToList(),
                             int.Parse(escrituraViewModel.Escritura.Manzana),
                             int.Parse(escrituraViewModel.Escritura.Predio),
-                            escrituraViewModel.Escritura.Comuna
+                            escrituraViewModel.Escritura.Comuna,
+                            MultiPropertyData
                             );
+            MultiPropertyData = getmulti(
+                int.Parse(escrituraViewModel.Escritura.Manzana),
+                int.Parse(escrituraViewModel.Escritura.Predio),
+                escrituraViewModel.Escritura.Comuna
+            );
             var ActualPercentByOwner = GetPorcentajeDerechoByRuts(
-                int.Parse(escritura.Manzana), 
-                int.Parse(escritura.Predio), 
-                escritura.Comuna, 
+                MultiPropertyData, 
                 AdquirienteRun.ToList());
             UpdateEndYearEnd(DataEnajenante, escritura.FechaInscripcion.Year - 1);
             var sumaPorcentajeDerecho = DataEnajenante.Sum(m => m.PorcentajeDerecho);
@@ -305,11 +329,16 @@ namespace aplicacion.Controllers
 
                 _context.Add(Newmultipropietario);
             }
-
+            MultiPropertyData = getmulti(
+                int.Parse(escrituraViewModel.Escritura.Manzana),
+                int.Parse(escrituraViewModel.Escritura.Predio),
+                escrituraViewModel.Escritura.Comuna
+            );
             FixPercentOfProperty(
                 int.Parse(escrituraViewModel.Escritura.Manzana),
                 int.Parse(escrituraViewModel.Escritura.Predio),
-                escrituraViewModel.Escritura.Comuna);
+                escrituraViewModel.Escritura.Comuna,
+                MultiPropertyData);
         }
 
         public void TransferByOwnershipOfProperty(
@@ -321,16 +350,25 @@ namespace aplicacion.Controllers
             Escritura escritura
         )
         {
+            var MultiPropertyData = getmulti(
+                int.Parse(escrituraViewModel.Escritura.Manzana),
+                int.Parse(escrituraViewModel.Escritura.Predio),
+                escrituraViewModel.Escritura.Comuna
+            );
             List<Multipropietario> DataEnajenante = GetMultiowner(
                             EnajenateRun.ToList(),
                             int.Parse(escrituraViewModel.Escritura.Manzana),
                             int.Parse(escrituraViewModel.Escritura.Predio),
-                            escrituraViewModel.Escritura.Comuna
+                            escrituraViewModel.Escritura.Comuna,
+                            MultiPropertyData
                             );
+            MultiPropertyData = getmulti(
+                int.Parse(escrituraViewModel.Escritura.Manzana),
+                int.Parse(escrituraViewModel.Escritura.Predio),
+                escrituraViewModel.Escritura.Comuna
+            );
             var ActualPercentByOwner = GetPorcentajeDerechoByRuts(
-                int.Parse(escritura.Manzana), 
-                int.Parse(escritura.Predio), 
-                escritura.Comuna, 
+                MultiPropertyData, 
                 AdquirienteRun.ToList());
             UpdateEndYearEnd(DataEnajenante, escritura.FechaInscripcion.Year - 1);
             List<Multipropietario> NewEnajenantes = UpdatePercentagesDomain(DataEnajenante, EnajenantePorcentajeDerecho.ToList(), escritura);
@@ -421,11 +459,8 @@ namespace aplicacion.Controllers
         }
 
 
-        public List<Multipropietario> GetMultiowner(List<string> Ruts, int manzana, int predio, string comuna )
+        public List<Multipropietario> GetMultiowner(List<string> Ruts, int manzana, int predio, string comuna, List<Multipropietario> mp )
         {
-            var mp = _context.Multipropietarios
-            .Where(m => m.Manzana == manzana && m.Predio == predio && m.Comuna == comuna && m.AnoVigenciaFinal == 0)
-            .ToList();
             List<Multipropietario> listMultipropietarios = new List<Multipropietario>();
             foreach (string rut in Ruts)
             {
@@ -749,10 +784,16 @@ namespace aplicacion.Controllers
                     _context.Add(multipropietario);
                 }
                 _context.Escrituras.Add(escritura);
+                var MultiPropertyData = getmulti(
+                int.Parse(escrituraViewModel.Escritura.Manzana),
+                int.Parse(escrituraViewModel.Escritura.Predio),
+                escrituraViewModel.Escritura.Comuna
+                 );
                 FixPercentOfProperty(
                     int.Parse(escrituraViewModel.Escritura.Manzana),
                     int.Parse(escrituraViewModel.Escritura.Predio),
-                    escrituraViewModel.Escritura.Comuna);
+                    escrituraViewModel.Escritura.Comuna,
+                    MultiPropertyData);
             }
             await _context.SaveChangesAsync();
 
