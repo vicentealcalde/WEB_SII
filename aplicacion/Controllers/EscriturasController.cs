@@ -438,11 +438,25 @@ namespace aplicacion.Controllers
 
             return listMultipropietarios;
         }
+        public List<Multipropietario> GetactualMultiowner( int manzana, int predio, string comuna )
+        {
+            var mp = _context.Multipropietarios
+            .Where(m => m.Manzana == manzana && m.Predio == predio && m.Comuna == comuna && m.AnoVigenciaFinal == 0)
+            .ToList();
+            
+
+            return mp;
+        }
 
         public List<Multipropietario> GetMultiownerByYear(int manzana, int predio, string comuna, int NumeroInscripcion, int AnoInscripcion )
         {
             var mp = _context.Multipropietarios
-            .Where(m => m.Manzana == manzana && m.Predio == predio && m.Comuna == comuna && m.NumeroInscripcion == NumeroInscripcion && m.AnoInscripcion == AnoInscripcion)
+            .Where(m => m.Manzana == manzana && 
+                m.Predio == predio && 
+                m.Comuna == comuna && 
+                m.NumeroInscripcion == NumeroInscripcion && 
+                m.AnoInscripcion == AnoInscripcion &&  
+                m.AnoVigenciaFinal == 0)
             .ToList();
             return mp;
         }
@@ -586,6 +600,7 @@ namespace aplicacion.Controllers
                 var EnajenanteNumAtencion = (Request.Form["Enajenante.NumAtencion"].ToString()).Split(",");
                 var EnajenateRun = (Request.Form["Enajenante.RunRut"].ToString()).Split(",");
                 var EnajenantePorcentajeDerecho = (Request.Form["Enajenante.PorcentajeDerecho"].ToString()).Split(",");
+                
                 var EnajenantePorcentajeDerechoNoAcreditado = (Request.Form["Enajenante.PorcentajeDerechoNoAcreditado"].ToString()).Split(",");
                 var IsValidEnajenantes = VerifyProperty(
                     EnajenateRun.ToList(),
@@ -593,15 +608,25 @@ namespace aplicacion.Controllers
                     int.Parse(escrituraViewModel.Escritura.Manzana),
                     int.Parse(escrituraViewModel.Escritura.Predio)
                     );
-                var oldmultiowner = GetMultiownerByYear(
+                  
+                try 
+                {
+                    var oldmultiowner = GetMultiownerByYear(
                     int.Parse(escrituraViewModel.Escritura.Manzana),
                     int.Parse(escrituraViewModel.Escritura.Predio),
                     escrituraViewModel.Escritura.Comuna, 
                     int.Parse(escrituraViewModel.Escritura.NumeroInscripcion),
                     escrituraViewModel.Escritura.FechaInscripcion.Year);
-
-                UpdateEndYearEnd(oldmultiowner, escrituraViewModel.Escritura.FechaInscripcion.Year);
-
+               
+                if (oldmultiowner.Count >= 1){
+                     UpdateEndYearEnd(oldmultiowner, escrituraViewModel.Escritura.FechaInscripcion.Year);
+                }}
+                catch{
+                    
+                }
+                
+               
+                
                 var CalculateDifferenceFromSumPercentEnajenate = CalculateDifferenceFromSumPercent(EnajenantePorcentajeDerecho.ToList());
                 if (EnajenateRun.Count() == 1 &&  AdquirienteRun.Count() == 1 )
                 {
@@ -835,7 +860,21 @@ namespace aplicacion.Controllers
             var escritura = await _context.Escrituras.FindAsync(id);
             if (escritura != null)
             {
+                var enajenantes = _context.Enajenantes.Where(e => e.NumAtencion == id);
+                _context.Enajenantes.RemoveRange(enajenantes);
+
+                var adquirentes = _context.Adquirentes.Where(a => a.NumAtencion == id);
+                _context.Adquirentes.RemoveRange(adquirentes);
+                try
+                {
+                   var multiowner = GetactualMultiowner(int.Parse(escritura.Manzana), int.Parse(escritura.Predio), escritura.Comuna);
+                foreach(var multi in multiowner){
+                    _context.Remove(multi);
+                }}
+                catch{}
+                
                 _context.Escrituras.Remove(escritura);
+                
             }
             
             await _context.SaveChangesAsync();
