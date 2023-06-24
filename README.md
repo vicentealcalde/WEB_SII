@@ -209,8 +209,9 @@ para que vuelva a funcionar correctamente.
 
 # Recordatorio:
 se debe descargar desde el administrador de paquetes nuget o nuget package manager:
-Microsoft.NET.Test.Sdk
-NUnit
-NUnit3TestAdapter
+
+    Microsoft.NET.Test.Sdk
+    NUnit
+    NUnit3TestAdapter
 
 tanto el NUnit como el NUnit3TestAdapter, creados por Charlie Poole
