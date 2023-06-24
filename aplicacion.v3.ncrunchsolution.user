@@ -1,0 +1,24 @@
+﻿<SolutionConfiguration>
+  <Settings>
+    <AutoEnable>True</AutoEnable>
+    <CurrentEngineMode>Run all tests automatically [Global]</CurrentEngineMode>
+    <TestListTreeLayout>
+      <Column>
+        <Name>TestFriendlyName</Name>
+        <Width>453</Width>
+      </Column>
+      <Column>
+        <Name>ExecutionTime</Name>
+        <Width>111</Width>
+      </Column>
+    </TestListTreeLayout>
+    <TestsWindowMenuOptions>
+      <VerticalSplitMenuOption>false</VerticalSplitMenuOption>
+      <ShowPassingTestsMenuOption>false</ShowPassingTestsMenuOption>
+      <ShowFailingTestsMenuOption>true</ShowFailingTestsMenuOption>
+      <ShowUnexecutedTestsMenuOption>true</ShowUnexecutedTestsMenuOption>
+      <ShowIgnoredTestsMenuOption>true</ShowIgnoredTestsMenuOption>
+    </TestsWindowMenuOptions>
+    <TestsWindowSplitterDistance>62.2009582519531%</TestsWindowSplitterDistance>
+  </Settings>
+</SolutionConfiguration>
