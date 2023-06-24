@@ -206,3 +206,11 @@ por
     server={nombre_del_servidor_en_sql_server}\\SQLEXPRESS
 
 para que vuelva a funcionar correctamente.
+
+# Recordatorio:
+se debe descargar desde el administrador de paquetes nuget o nuget package manager:
+Microsoft.NET.Test.Sdk
+NUnit
+NUnit3TestAdapter
+
+tanto el NUnit como el NUnit3TestAdapter, creados por Charlie Poole
